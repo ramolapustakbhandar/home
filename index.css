@@ -29,7 +29,7 @@ nav li a:hover{
 
 }
 .call img{
-    height: 50px;
+    height: 45px;
     position: absolute;
     margin-top: -1%;
     margin-left: 3%;
@@ -45,15 +45,15 @@ nav li a:hover{
 }
 .location img{
     float: right;
-    height: 50px;
-    margin-top: -11%;
-    margin-right: 28%;
+    height: 46px;
+    margin-top: -12%;
+    margin-right: 36%;
 }
-.location a{
+.location1 a{
     text-decoration: none;
     color: black;
-    margin-top: -9%;
-    margin-right: -40%;
+    margin-top: -10%;
+    margin-right: -48%;
     float: right;
 }
 h1{
