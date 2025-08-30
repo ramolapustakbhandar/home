@@ -30,14 +30,14 @@ nav li a:hover{
 }
 .call img{
     height: 50px;
-    margin-left: 5%;
     position: absolute;
-    margin-top: -4px;
+    margin-top: -1%;
+    margin-left: 3%;
 }
 
 .call a{
     display: list-item;
-    margin-left: 15%;
+    margin-left: 18%;
     margin-top: 1%;
     list-style: none;
     text-decoration: none;
@@ -45,37 +45,36 @@ nav li a:hover{
 }
 .location img{
     float: right;
-    height: 60px;
-    margin-top: -7.5%;
-    margin-right: 23%;
+    height: 50px;
+    margin-top: -11%;
+    margin-right: 28%;
 }
 .location a{
     text-decoration: none;
     color: black;
-    margin-top: -40px;
-    margin-right: -200px;
+    margin-top: -9%;
+    margin-right: -40%;
     float: right;
-    
 }
 h1{
     padding: 0px 26px;
-    margin-top: 40px;
-    font-size: 57px;
-    font-family: PT Sans Narrow;;
+    margin-top: 6%;
+    font-size: 4vh;
+    font-family: PT Sans Arial Narrow;
 }
 h3{
-    font-size: 37px;
+    font-size: 3vh;
     color: red;
-    margin-top: -30px;
-    padding: 0px 25px;
+    margin-top: 0%;
+    padding: 0px 28px;
     font-family: Academy Engraved LET;
 }
 .description ul{
     list-style: none;
 }
 .description li{
-    padding: 15px;
-    font-size: 40px;
+    padding: 12px 0px;
+    font-size: 3vh;
 }
 .location a:hover{
     color: red;
