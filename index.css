@@ -21,11 +21,11 @@ nav li a:hover{
     color: red;
 }
 /*                  ----------header start----------                      */
-@media screen and (max-width: 710px){
+
 .img img{
     margin-top: 22px;
     padding-bottom: 10px;
-    width: 100vh;
+    width: 100%;
 
 }
 .call img{
@@ -84,5 +84,4 @@ h3{
 .call a:hover{
     color: red;
     font-size: 17px;
-}
 }
