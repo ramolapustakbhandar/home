@@ -22,3 +22,14 @@ nav li a:hover{
 @media screen and (max-width: 710px){
 
 }
+.category img{
+    width: 9em;
+    margin: 11px;
+    border-color: black;
+    border-width: 4px;
+    border-style: solid;
+}
+.category img:hover{
+    width: 10em;
+    border-width: 6px;
+}
