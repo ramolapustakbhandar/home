@@ -25,6 +25,7 @@ nav li a:hover{
 .img img{
     margin-top: 22px;
     padding-bottom: 10px;
+    width: 100vh;
 
 }
 .call img{
