@@ -31,30 +31,30 @@ nav li a:hover{
 .call img{
     height: 45px;
     position: absolute;
-    margin-top: -1%;
-    margin-left: 3%;
+    margin-top: -3px;
+    margin-left: 17px;
 }
 
 .call a{
     display: list-item;
-    margin-left: 18%;
-    margin-top: 1%;
+    margin-left: 70px;
+    margin-top: 5px;
     list-style: none;
     text-decoration: none;
     color: black;
 }
 .location img{
-    float: right;
+    position: absolute;
     height: 46px;
-    margin-top: -12%;
-    margin-right: 36%;
+    margin-top: -44px;
+    margin-left: 208px;
 }
 .location1 a{
     text-decoration: none;
     color: black;
-    margin-top: -10%;
-    margin-right: -48%;
-    float: right;
+    position: absolute;
+    margin-top: -38px;
+    margin-left: 258px;
 }
 h1{
     padding: 0px 26px;
@@ -76,7 +76,7 @@ h3{
     padding: 12px 0px;
     font-size: 3vh;
 }
-.location a:hover{
+.location1 a:hover{
     color: red;
     font-size: 17px;
 }
