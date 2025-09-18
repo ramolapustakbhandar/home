@@ -1,0 +1,10 @@
+*{
+    padding: 0;
+    margin: 0%;
+}
+.navbar{
+    width: 100vw;
+    height: 60px;
+    display: flex;
+    color: black;
+}

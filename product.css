@@ -1,6 +1,7 @@
 body{
     background-color: lightgray;
 }
+/*                  ----------header start----------                      */
 .navbar{
     background-color: black;
     width: 100%;
@@ -23,17 +24,22 @@ nav li a{
 nav li a:hover{
     color: red;
 }
-@media screen and (max-width: 710px){
 
-}
+/*                  ----------Header End----------                      */
 .category img{
-    width: 9em;
+    width: 22vw;
     margin: 11px;
     border-color: black;
     border-width: 4px;
     border-style: solid;
 }
-.category img:hover{
-    width: 10em;
-    border-width: 6px;
+
+footer{
+    position: fixed;
+    bottom: 0%;
+    left: 0%;
+    right: 0%;
+    padding-bottom: 65px;
+    background-color: black;
+    color: white;
 }
