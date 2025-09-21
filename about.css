@@ -10,22 +10,22 @@
     height: 60px;
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
 }
-.navbar ul{
-    align-content: center;
-    margin: 0%;
-}
-.navbar li{
-    display: inline;
-    list-style: none;
-    padding: 5px;
-}
-nav li a{
+.nav1 a {
     text-decoration: none;
-    color: white;
+    color: #ecf0f1;
 }
-nav li a:hover{
-    color: r#e74c3c;
+.nav2 a {
+    text-decoration: none;
+    color: #ecf0f1;
+}
+.nav3 a {
+    text-decoration: none;
+    color: #ecf0f1;
+}
+.navbar a:hover{
+    color: #e74c3c;
 }
 /*                  ----------Header End----------                      */
 /** Footer Start **/
