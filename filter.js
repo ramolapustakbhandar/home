@@ -20,37 +20,57 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const phoneNumber = "918936969575";
 
-    document.querySelectorAll(".whatsapp-btn").forEach(button => {
-        button.addEventListener("click", (e) => {
+    const phoneNumber = "918936969575";
+    const sheetURL = "https://script.google.com/macros/s/AKfycbxscmDhD47oCUcUq2vBAPfzXiQS5NrH1XL8ViTYOuS0HlqFAEwZYu7pnuUlRz6jCu-Q/exec";
+
+    document.querySelectorAll(".whatsapp-btn").forEach(btn => {
+
+        btn.addEventListener("click", function (e) {
             e.preventDefault();
 
-            const card = button.closest(".card");
+            const card = this.closest(".card");
 
-            const brand = card.getAttribute("data-brand");
-            const productName = card.querySelector(".card-title").innerText.trim();
-            const productType = card.querySelector(".card-type").innerText.trim();
-            const imageUrl = card.querySelector("img").getAttribute("src");
+            const brand = card.dataset.brand || "";
+            const product = card.querySelector(".card-title")?.innerText.trim() || "";
+            const type = card.querySelector(".card-type")?.innerText.trim() || "";
+            const image = card.querySelector("img")?.src || "";
 
-            // IMAGE LINK MUST BE FIRST OR LAST AND ON NEW LINE
+            // Send order to Google Sheet
+            fetch(sheetURL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify({
+                    brand: brand,
+                    product: product,
+                    type: type,
+                    image: image
+                })
+            });
+
+            // WhatsApp message
             const message =
-`NEW ORDER
-
-${imageUrl}
+`NEW ORDER 📦
 
 Brand: ${brand}
-Product: ${productName}
-Type: ${productType}`;
+Product: ${product}
+Type: ${type}
 
-            const whatsappURL =
-                `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+Image:
+${image}`;
 
-            window.location.href = whatsappURL;
-            window.open(whatsappURL, "_blank");
+            window.open(
+                `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+                "_blank"
+            );
         });
+
     });
 });
+
+
 
 
 
