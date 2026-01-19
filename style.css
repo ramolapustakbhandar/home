@@ -14,7 +14,9 @@
 body { font-family: 'Poppins', sans-serif; color: var(--dark); line-height: 1.6; }
 
 h1, h2, .logo { font-family: 'Playfair Display', serif; }
+
 /*                  ----------header start----------                      */
+
 header { 
     background: var(--primary); 
     padding: 0.5rem 1%; 
@@ -56,6 +58,7 @@ header {
 .navbar a:hover{
     color: var(--accent);
 }
+
 /*                  ----------Header End----------                      */
 
 
