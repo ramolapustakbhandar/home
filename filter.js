@@ -43,11 +43,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type": "text/plain;charset=utf-8"
                 },
                 body: JSON.stringify({
-                    brand: brand,
-                    product: product,
-                    type: type,
-                    image: image
-                })
+  action: "create",
+  brand,
+  product,
+  type,
+  image
+})
+
             });
 
             // WhatsApp message

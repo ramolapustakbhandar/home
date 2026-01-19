@@ -45,15 +45,19 @@ header {
 }
 .nav2 a {
     text-decoration: none;
-    color: #ecf0f1;
+    color: var(--white);
 }
 .nav3 a {
     text-decoration: none;
-    color: #ecf0f1;
+    color: var(--white);
 }
 .nav4 a {
     text-decoration: none;
-    color: #ecf0f1;
+    color: var(--white);
+}
+.nav5 a {
+    text-decoration: none;
+    color: var(--white);
 }
 .navbar a:hover{
     color: var(--accent);
