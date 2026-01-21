@@ -1,219 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Admin Dashboard | Ramola</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root {
-      --primary: #1e293b;
-      --accent: #22c55e;
-      --bg: #f8fafc;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, Arial, sans-serif;
-      background: var(--bg);
-    }
-
-    /* LOGIN */
-    #login {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .login-box {
-      background: #fff;
-      padding: 30px;
-      width: 320px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.15);
-    }
-
-    .login-box h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .login-box input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    .login-box button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    /* DASHBOARD */
-    #dashboard {
-      display: none;
-      padding: 20px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--primary);
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 12px;
-    }
-
-    header button {
-      background: #ef4444;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    table {
-      width: 100%;
-      margin-top: 20px;
-      border-collapse: collapse;
-      background: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-    }
-
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-    }
-
-    th {
-      background: #e2e8f0;
-    }
-
-    select {
-      padding: 6px;
-      border-radius: 6px;
-    }
-
-    .status-PENDING { color: #f97316; font-weight: bold; }
-    .status-COMPLETED { color: #22c55e; font-weight: bold; }
-  </style>
+<title>Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Poppins;background:#0f172a;color:#e5e7eb}
+header{background:#020617;padding:20px;font-size:22px;font-weight:600}
+.login{max-width:400px;margin:100px auto;background:#020617;padding:30px;border-radius:12px}
+.container{padding:30px;display:none}
+input{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:none}
+button{padding:12px;background:#22c55e;border:none;font-weight:600;border-radius:8px;cursor:pointer;margin-top:15px}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{padding:12px;border-bottom:1px solid #334155;font-size:14px}
+th{background:#020617}
+img{width:45px;border-radius:6px}
+.badge{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.Pending{background:#facc15;color:#000}
+</style>
 </head>
+
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-  <div class="login-box">
-    <h2>🔐 Admin Login</h2>
-    <input type="password" id="password" placeholder="Enter password" />
-    <button onclick="login()">Login</button>
-  </div>
+<header>📦 Order Management</header>
+
+<div class="login" id="loginBox">
+<h3>Admin Login</h3>
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login</button>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <header>
-    <h2>📦 Orders Dashboard</h2>
-    <button onclick="logout()">Logout</button>
-  </header>
-
-  <table id="orders">
-    <thead>
-      <tr>
-        <th>Order ID</th>
-        <th>Date</th>
-        <th>Brand</th>
-        <th>Product</th>
-        <th>Type</th>
-        <th>Image</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<div class="container" id="panel">
+<table>
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Customer</th>
+<th>Phone</th>
+<th>Brand</th>
+<th>Product</th>
+<th>Type</th>
+<th>Qty</th>
+<th>Image</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody id="orders"></tbody>
+</table>
 </div>
 
 <script>
-const ADMIN_PASSWORD = "ramola123"; // change if needed
-const SHEET_ID = "1oOU2fydF4iq47UmTnJa4ZOdqqMxLV8m0uJCUkT4pmCE";
-const API_KEY = "AIzaSyC9B_IFXeG57mNG7LpsVQwbpey3GrnQlzI";
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxscmDhD47oCUcUq2vBAPfzXiQS5NrH1XL8ViTYOuS0HlqFAEwZYu7pnuUlRz6jCu-Q/exec";
-const RANGE = "Sheet1!A2:G";
+const ADMIN_PASS = "admin123"; // CHANGE
+const API = "https://script.google.com/macros/s/AKfycbwfp8QXotRL5cQVl6nfHJBmEJC0N3wEbyKzdbMbfNNeGpoONsGPdONmeBcp-u18iQc/exec";
 
-function loadOrders() {
-  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`)
-    .then(res => res.json())
-    .then(data => {
-      const tbody = document.querySelector("#orders tbody");
-      tbody.innerHTML = "";
+function login(){
+  if(password.value === ADMIN_PASS){
+    loginBox.style.display="none";
+    panel.style.display="block";
+    loadOrders();
+  } else alert("Wrong password");
+}
 
-      data.values.forEach(row => {
-        const tr = document.createElement("tr");
-
-        row.forEach((cell, index) => {
-          const td = document.createElement("td");
-
-          // Image column
-          if (index === 5) {
-            td.innerHTML = `<a href="${cell}" target="_blank">View</a>`;
-          }
-          // Status dropdown
-          else if (index === 6) {
-            td.innerHTML = `
-              <select onchange="updateStatus('${row[0]}', this.value)">
-                <option value="PENDING" ${cell==="PENDING"?"selected":""}>PENDING</option>
-                <option value="COMPLETED" ${cell==="COMPLETED"?"selected":""}>COMPLETED</option>
-                <option value="CANCELLED" ${cell==="CANCELLED"?"selected":""}>CANCELLED</option>
-              </select>
-            `;
-          }
-          else {
-            td.textContent = cell;
-          }
-
-          tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-      });
+function loadOrders(){
+  fetch(API)
+  .then(res=>res.json())
+  .then(data=>{
+    orders.innerHTML="";
+    data.forEach(o=>{
+      orders.innerHTML+=`
+      <tr>
+        <td>${o.orderId}</td>
+        <td>${o.name}<br><small>${o.address}</small></td>
+        <td>${o.phone}</td>
+        <td>${o.brand}</td>
+        <td>${o.product}</td>
+        <td>${o.type}</td>
+        <td>${o.qty}</td>
+        <td><img src="${o.image}"></td>
+        <td><span class="badge Pending">${o.status}</span></td>
+      </tr>`;
     });
-}
-
-function updateStatus(orderId, status) {
-  fetch(WEB_APP_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify({
-      action: "updateStatus",
-      orderId: orderId,
-      status: status
-    })
   })
-  .then(() => alert("Status updated successfully ✅"));
-}
-
-/* AUTO LOAD */
-if (localStorage.getItem("adminLogged") === "true") {
-  document.getElementById("login").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
-  loadOrders();
+  .catch(err => alert("API Error"));
 }
 </script>
-
 
 </body>
 </html>

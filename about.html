@@ -1,87 +1,487 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Ramola Pustak Bhandar</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | Ramola Pustak Bhandar</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+/* ===== COMMON ===== */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+:root {
+    --primary: #002147;
+    --accent: #D4AF37;
+    --white: #ffffff;
+    --grey: #f4f4f4;
+    --dark: #1a1a1a;
+    --shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ===== HEADER (UNCHANGED) ===== */
+header { 
+    background: var(--primary); 
+    padding: 0.5rem 1%; 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.navbar{
+    background-color: var(--primary);
+    color: white;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.nav1 a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 1px; 
+    transition: 0.3s; 
+}
+.nav2 a, .nav3 a, .nav4 a {
+    text-decoration: none;
+    color: var(--white);
+}
+.navbar a:hover{
+    color: var(--accent);
+}
+
+/* ===== ABOUT PAGE ===== */
+.about-page {
+  padding: 70px 20px;
+  background: linear-gradient(135deg, #eef2f7, #e3e9f1);
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr;
+  gap: 40px;
+}
+
+/* ===== IMAGE STACK (LEFT) ===== */
+.about-images-left {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+}
+
+.about-images-left img {
+  width: 100%;
+  height: calc((100% - 30px) / 3.1);
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+/* ===== CONTENT ===== */
+.about-content h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #002147;
+}
+.about-content p {
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.about-content .highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ===== NEW SECTIONS ===== */
+.section-title {
+  font-size: 26px;
+  color: #002147;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.card {
+  background: #f7f9fc;
+  border-radius: 12px;
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+.card h4 {
+  margin: 0 0 8px 0;
+  color: #002147;
+}
+.card p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.timeline {
+  margin-top: 20px;
+  border-left: 3px solid var(--primary);
+  padding-left: 20px;
+}
+
+.timeline-item {
+  margin-bottom: 18px;
+}
+
+.timeline-item span {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ===== BUTTONS ===== */
+.cta-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.cta-btn {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.cta-btn.primary {
+  background: var(--primary);
+}
+.cta-btn.secondary {
+  background: var(--accent);
+  color: #002147;
+}
+
+/* ===== TESTIMONIALS ===== */
+.testimonial {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.testimonial p {
+  margin: 0;
+  color: #555;
+}
+
+.testimonial span {
+  display: block;
+  margin-top: 8px;
+  color: #888;
+  font-size: 13px;
+}
+
+/* ===== MAP ===== */
+.map {
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* ===== FOOTER (UNCHANGED) ===== */
+.footer {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  border-top: 5px solid #e74c3c;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 200px;
+  margin: 20px;
+}
+
+.footer-column h3 {
+  color: #e74c3c;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-item:hover {
+  transform: translateX(10px);
+  color: #3498db;
+}
+
+.footer-item a {
+  color: #ecf0f1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-item a:hover {
+  color: #3498db;
+}
+
+.footer-item i {
+  margin-right: 15px;
+  font-size: 1.2em;
+  color: #95a5a6;
+  transition: color 0.3s ease;
+}
+
+.footer-item:hover i {
+  color: #3498db;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+}
+
+.social-links a {
+  font-size: 1.5em;
+  color: #ecf0f1;
+  margin-right: 20px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #3498db;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .footer {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+  }
+
+  .footer-column {
+      min-width: 90%;
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .about-container {
+    grid-template-columns: 1fr;
+    padding: 25px;
+  }
+}
+
+/* ===== MOBILE IMAGE ORDER ===== */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+
+  .about-images-left {
+    display: none;
+  }
+}
+
+/* ===== MOBILE IMAGES ===== */
+.mobile-only img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  margin-top: 20px;
+}
+</style>
 </head>
+
 <body>
-     <!--                Header start                        -->
-     <header>
-      <div class="navbar">
-         <div class="nav1"><a href="index.html">HOME</a></div>
-         <div class="nav2"><a href="products.html">PRODUCT</a></div>
-         <div class="nav3"><a href="about.html">ABOUT</a></div>
-         <div class="nav4"><a href="contact.html">Contuct Us</a></div>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="navbar">
+     <div class="nav1"><a href="index.html">HOME</a></div>
+     <div class="nav2"><a href="products.html">PRODUCT</a></div>
+     <div class="nav3"><a href="about.html">ABOUT</a></div>
+     <div class="nav4"><a href="contact.html">Contact Us</a></div>
+  </div>
+</header>
+
+<!-- ===== ABOUT SECTION ===== -->
+<section class="about-page">
+  <div class="about-container">
+
+    <!-- ===== DESKTOP LEFT IMAGE STACK ===== -->
+    <div class="about-images-left">
+      <img src="img1.jpeg" alt="Main Image">
+      <img src="img2.jpeg" alt="Second Image">
+      <img src="img3.jpeg" alt="Third Image">
+    </div>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="about-content">
+      <h2>Welcome to <span class="highlight">Ramola Pustak Bhandar</span></h2>
+      <p>
+        Ramola Pustak Bhandar, established in <strong>1996</strong>, is the leading stationery store in <strong>Selaqui, Dehradun</strong>. 
+        We provide high-quality stationery products to schools, colleges, factories, offices and retail customers.
+      </p>
+
+      <p>
+        We also handle wholesale and bulk orders and offer a wide range of sports & gift items. Our mission is to deliver reliable products with excellent service.
+      </p>
+
+      <!-- ===== WHY CHOOSE US ===== -->
+      <div class="section-title">Why Choose Us</div>
+      <div class="grid-2">
+  <div class="card">
+    <h4>🎯 Our Mission</h4>
+    <p>Provide best stationery products at affordable prices.</p>
+  </div>
+  <div class="card">
+    <h4>🧑‍💼 Customer First</h4>
+    <p>Friendly service & quick support for every customer.</p>
+  </div>
+  <div class="card">
+    <h4>📚 Wide Range</h4>
+    <p>Huge collection of stationery products for all needs.</p>
+  </div>
+  <div class="card">
+    <h4>✅ Quality Product</h4>
+    <p>Only premium products with 100% quality assurance.</p>
+  </div>
+</div>
+
+
+      <!-- ===== TIMELINE ===== -->
+      <div class="section-title">Our Journey</div>
+      <div class="timeline">
+        <div class="timeline-item"><span>1996</span> – Ramola Pustak Bhandar was founded in Selaqui.</div>
+        <div class="timeline-item"><span>2010</span> – Expanded into wholesale supplies.</div>
+        <div class="timeline-item"><span>2015</span> – Started supplying to schools and colleges.</div>
+        <div class="timeline-item"><span>2020</span> – Added sports & gift items to the collection.</div>
       </div>
-    </header>
-  <!--                Header End                        -->
 
-    <section>
-        <h2 class="section-title">Our Heritage</h2>
-        <div class="about-container">
-            <p>Founded in 1996 by Shri Ravindra Singh Ramola, <strong>Ramola Pustak Bhandar</strong> has grown from a local shop to a cornerstone of the Selaqui community. Our commitment to educational excellence and customer satisfaction has made us a trusted name for generations of students.</p>
-            
-            <div class="owner-card">
-                <h3>Meet the Owner</h3>
-                <h4>Ravindra Singh Ramola</h4>
-                <p><em>Jila adakesh Seva Bhariti Vikasnagar & BDC Member Dhulkot</em></p>
-                <p>A visionary leader and social worker, Mr. Ramola ensures that our shop remains a supportive hub for the growth and education of every individual in Dehradun.</p>
-            </div>
-        </div>
-    </section>
+      <!-- ===== TESTIMONIALS ===== -->
+      <div class="section-title">Customer Reviews</div>
+      <div class="testimonial">
+        <p>“Best stationery store in Selaqui. Quality products and friendly staff.”</p>
+        <span>— Happy Customer</span>
+      </div>
+      <div class="testimonial">
+        <p>“They provide fast service and excellent bulk order support.”</p>
+        <span>— School Admin</span>
+      </div>
 
-<!--                Footer Start                        -->
-   <footer class="footer">
-        <div class="footer-column">
-            <h3>Address</h3>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Main Market Selaqui</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Opposite Punjab National Bank</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Chakarata Road</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Dehradun Uttarakhand</p></a>
-            </div>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Contact Us</h3>
-            <div class="footer-item">
-                <i class="fas fa-phone"></i>
-                <a href="tel:919411136634"><p>Phone: +91-9411136634</p></a>
-            </div>
-            <div class="footer-item">
-                <i class="fas fa-envelope"></i>
-                <a href="https:ramolastationery@gmail.com"><p>Email: ramolastationery@gmail.com</p></a>
-            </div>
-            <div class="footer-item">
-                <i class="fab fa-whatsapp"></i>
-                <a href="https://wa.me/9149151622"><p>WhatsApp: +91-9149151622</p></a>
-            </div>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Follow Us</h3>
-            <div class="social-links">
-                <a href="https://www.instagram.com/ramolastationery/" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" aria-label="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" aria-label="Twitter">
-                    <i class="fab fa-twitter"></i>
-                </a>
-            </div>
-        </div>
-    </footer>
-  <!--                Footer End                        -->
+      <!-- ===== CTA BUTTONS ===== -->
+      <div class="cta-buttons">
+        <a class="cta-btn primary" href="tel:919411136634"><i class="fas fa-phone"></i> Call Us</a>
+        <a class="cta-btn secondary" href="https://wa.me/919149151622"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      </div>
+
+      <!-- ===== MAP ===== -->
+      <div class="section-title">Find Us</div>
+      <div class="map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3446.369349394816!2d77.8543248!3d30.3547488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390f2b0006c1ba53%3A0xe9b7bc8dfa195b9b!2sRamola%20Pustak%20Bhandar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+          width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+
+      <!-- ===== MOBILE IMAGES ORDER ===== -->
+      <div class="mobile-only">
+        <img src="img1.jpeg" alt="Mobile Image 1">
+        <img src="img2.jpeg" alt="Mobile Image 2">
+        <img src="img3.jpeg" alt="Mobile Image 3">
+        <img src="img4.jpeg" alt="Mobile Image 4">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-column">
+      <h3>Address</h3>
+      <div class="footer-item">
+          <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Main Market Selaqui</p></a>
+      </div>
+      <div class="footer-item">
+          <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Opposite Punjab National Bank</p></a>
+      </div>
+      <div class="footer-item">
+          <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Chakarata Road</p></a>
+      </div>
+      <div class="footer-item">
+          <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Dehradun Uttarakhand</p></a>
+      </div>
+  </div>
+  
+  <div class="footer-column">
+      <h3>Contact Us</h3>
+      <div class="footer-item">
+          <i class="fas fa-phone"></i>
+          <a href="tel:919411136634"><p>Phone: +91-9411136634</p></a>
+      </div>
+      <div class="footer-item">
+          <i class="fas fa-envelope"></i>
+          <a href="https:ramolastationery@gmail.com"><p>Email: ramolastationery@gmail.com</p></a>
+      </div>
+      <div class="footer-item">
+          <i class="fab fa-whatsapp"></i>
+          <a href="https://wa.me/9149151622"><p>WhatsApp: +91-9149151622</p></a>
+      </div>
+  </div>
+  
+  <div class="footer-column">
+      <h3>Follow Us</h3>
+      <div class="social-links">
+          <a href="https://www.instagram.com/ramolastationery/" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+          </a>
+      </div>
+  </div>
+</footer>
+
 </body>
 </html>

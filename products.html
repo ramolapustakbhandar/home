@@ -1,88 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collections | Ramola Pustak Bhandar</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collections | Ramola Pustak Bhandar</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+/* ---------------------- CSS START ---------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap');
+:root { --primary: #002147; --accent: #D4AF37; --white: #ffffff; --grey: #f4f4f4; --dark: #1a1a1a; --shadow: 0 10px 30px rgba(0,0,0,0.1); }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Poppins', sans-serif; color: var(--dark); line-height:1.6; }
+h1,h2,.logo { font-family: 'Playfair Display', serif; }
+
+/* Header */
+header { background: var(--primary); padding:0.5rem 1%; position: sticky; top:0; z-index:1000; box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.navbar{ display:flex; justify-content: space-evenly; align-items:center; height:60px; }
+.navbar a { text-decoration:none; color:#fff; transition:0.3s;}
+.navbar a:hover { color: var(--accent); }
+
+/* Section Titles */
+.section-title { font-size: 2.5rem; color: var(--primary); text-align: center; margin: 2rem 0; }
+.section-title::after { content:''; display:block; width:60px; height:3px; background:var(--accent); margin:10px auto; }
+
+/* Layout */
+.product-page-container { display:flex; gap:2rem; padding:0 5%; }
+.sidebar { width:250px; background:var(--grey); padding:2rem; border-radius:20px; height:fit-content; }
+.product-grid { flex:1; display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:2rem; }
+
+/* Cards */
+.card { background: var(--white); border-radius:20px; overflow:hidden; box-shadow: var(--shadow); transition:0.4s; position:relative; }
+.card:hover { transform: translateY(-5px); }
+.card-img-wrapper { height:200px; overflow:hidden; position:relative; }
+.card-img-wrapper img { width:100%; height:100%; object-fit:cover; transition:0.5s; }
+.card:hover .card-img-wrapper img { transform:scale(1.1); }
+.badge-brand { position:absolute; top:10px; left:10px; background:var(--primary); color:#fff; padding:5px 12px; border-radius:20px; font-size:0.7rem; }
+.card-content { padding:1rem; }
+.card-type { color: var(--accent); font-size:0.7rem; font-weight:600; text-transform:uppercase; margin-bottom:5px; }
+
+/* Buttons */
+.shop-now-btn, .add-to-cart-btn { width:100%; padding:12px; border:none; border-radius:30px; cursor:pointer; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; transition:0.3s; }
+.shop-now-btn { background: linear-gradient(135deg,var(--primary),#003366); color:var(--accent); margin-top:10px; }
+.shop-now-btn:hover { background: linear-gradient(135deg,var(--accent),#f1d27a); color:var(--primary); transform:translateY(-2px);}
+.add-to-cart-btn { background: linear-gradient(135deg,#ff9800,#ff5722); color:#fff; margin-top:10px; }
+.add-to-cart-btn:hover { background: linear-gradient(135deg,#ff5722,#e64a19); transform:translateY(-2px); }
+.add-to-cart-btn:active { transform: scale(0.97); }
+
+/* Cart Icon */
+.cart-icon { position:relative; font-size:26px; cursor:pointer; color:#fff; }
+.cart-count { position:absolute; top:-8px; right:-12px; background: linear-gradient(135deg,#00e676,#00c853); color:#000; font-size:12px; font-weight:800; padding:4px 8px; border-radius:999px; min-width:22px; text-align:center; line-height:1; box-shadow:0 0 0 2px #111,0 6px 14px rgba(0,0,0,0.4); animation:pop 0.25s ease; }
+@keyframes pop {0%{transform:scale(0.6);}100%{transform:scale(1);}}
+
+/* Cart Panel */
+.cart-panel { position:fixed; top:0; right:-400px; width:360px; height:100vh; background:#111; color:#fff; display:flex; flex-direction:column; transition: right 0.3s ease; z-index:9999; }
+.cart-panel.open { right:0; }
+.cart-header { display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #333; }
+.close-cart { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; }
+.cart-items { flex:1; overflow-y:auto; padding:10px; }
+.cart-item { display:flex; gap:10px; margin-bottom:12px; background:#1c1c1c; padding:8px; border-radius:8px; }
+.cart-item img { width:60px; height:60px; object-fit:contain; background:#fff; border-radius:6px; }
+.cart-info { flex:1; }
+.cart-info h4 { font-size:14px; margin:0 0 4px; }
+.cart-info small { color:#aaa; }
+.cart-actions { display:flex; align-items:center; gap:6px; margin-top:6px; }
+.qty-btn { background:#00e676; border:none; color:#000; width:24px; height:24px; border-radius:50%; cursor:pointer; font-weight:bold; }
+.remove-btn { margin-left:auto; background:none; border:none; color:#ff5252; cursor:pointer; font-size:18px; }
+.cart-footer { padding:15px; border-top:1px solid #333; }
+.checkout-btn { width:100%; padding:12px; background:#25D366; border:none; color:#000; font-weight:bold; border-radius:8px; cursor:pointer; }
+
+/* Overlay */
+.cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; z-index:9998; }
+.cart-overlay.show { display:block; }
+
+/* Modal */
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; justify-content:center; align-items:center; z-index:9999; }
+.modal-box { background:#111; color:#fff; padding:20px; width:320px; border-radius:10px; }
+.modal-box input { width:100%; padding:10px; margin:8px 0; border-radius:6px; border:none; }
+.modal-box button { width:100%; padding:12px; background:#25D366; color:#000; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
+
+/* Footer */
+.footer { background-color:#2c3e50; color:#ecf0f1; padding:40px 20px; display:flex; justify-content:space-around; flex-wrap:wrap; border-top:5px solid #e74c3c; }
+.footer-column { flex:1; min-width:200px; margin:20px; }
+.footer-column h3 { color:#e74c3c; border-bottom:2px solid #3498db; padding-bottom:10px; font-size:1.5em; margin-bottom:15px; }
+.footer-item { display:flex; align-items:center; margin:10px 0; }
+.footer-item a { color:#ecf0f1; text-decoration:none; }
+.footer-item a:hover { color:#3498db; }
+.footer-item i { margin-right:15px; font-size:1.2em; color:#95a5a6; }
+.social-links { display:flex; align-items:center; }
+.social-links a { font-size:1.5em; color:#ecf0f1; margin-right:20px; }
+.social-links a:hover { color:#3498db; transform:scale(1.2);}
+@media(max-width:768px){.product-page-container{flex-direction:column;}}
+/* ---------------------- CSS END ---------------------- */
+</style>
 </head>
 <body>
-     <!--                Header start                        -->
-     <header>
-      <div class="navbar">
-         <div class="nav1"><a href="index.html">HOME</a></div>
-         <div class="nav2"><a href="products.html">PRODUCT</a></div>
-         <div class="nav3"><a href="about.html">ABOUT</a></div>
-         <div class="cart-icon" id="cartIcon">
-  <i class="fas fa-shopping-cart"></i>
-  <span class="cart-count" id="cartCount">0</span>
+
+<!-- Header -->
+<header>
+  <div class="navbar">
+    <div class="nav1"><a href="index.html">HOME</a></div>
+    <div class="nav2"><a href="products.html">PRODUCT</a></div>
+    <div class="nav3"><a href="about.html">ABOUT</a></div>
+    <div class="cart-icon" id="cartIcon"><i class="fas fa-shopping-cart"></i><span class="cart-count" id="cartCount">0</span></div>
+  </div>
+</header>
+
+<section>
+<h2 class="section-title">Our Premium Collections</h2>
+<div class="product-page-container">
+<aside class="sidebar">
+<h3>Filter by Brand</h3>
+<label><input type="checkbox" class="brand-filter" value="DOMS"> DOMS</label>
+<label><input type="checkbox" class="brand-filter" value="NATRAJ"> NATRAJ</label>
+<label><input type="checkbox" class="brand-filter" value="FLAIR"> FLAIR</label>
+<label><input type="checkbox" class="brand-filter" value="CLASSMATE"> CLASSMATE</label>
+<label><input type="checkbox" class="brand-filter" value="CAMLIN"> CAMLIN</label>
+<label><input type="checkbox" class="brand-filter" value="PARKER"> PARKER</label>
+<label><input type="checkbox" class="brand-filter" value="NAVNEET"> NAVNEET</label>
+<label><input type="checkbox" class="brand-filter" value="PARKER"> PARKER</label>
+<label><input type="checkbox" class="brand-filter" value="CELLO"> CELLO</label>
+<label><input type="checkbox" class="brand-filter" value="APSARA"> APSARA</label>
+<label><input type="checkbox" class="brand-filter" value="HAUSAR"> HAUSAR</label>
+<label><input type="checkbox" class="brand-filter" value="FABER-CASTELL"> FABER-CASTELL</label>
+<!-- add more brands as needed -->
+<h3>Filter by Type</h3>
+<label><input type="checkbox" class="type-filter" value="P-A"> PENCIL</label>
+<label><input type="checkbox" class="type-filter" value="COLOURS"> COLOURS</label>
+<label><input type="checkbox" class="type-filter" value="PENS"> PENS</label>
+<label><input type="checkbox" class="type-filter" value="NOTEBOOK"> NOTEBOOKS</label>
+<label><input type="checkbox" class="type-filter" value="BAGS"> BAGS</label>
+<label><input type="checkbox" class="type-filter" value="F-F"> FILE & FOLDERS</label>
+<label><input type="checkbox" class="type-filter" value="PAPER"> PAPER</label>
+<label><input type="checkbox" class="type-filter" value="CRAFT-ITEMS"> CRAFT ITEMS</label>
+<label><input type="checkbox" class="type-filter" value="GIFTS"> GIFTS</label>
+<label><input type="checkbox" class="type-filter" value="DIARY"> DIARY</label>
+<label><input type="checkbox" class="type-filter" value="WRITING-INSTRUMENT"> WRITING INSTRUMENT</label>
+<label><input type="checkbox" class="type-filter" value="BOARDS"> BOARDS</label>
+<label><input type="checkbox" class="type-filter" value="COLOURS"> COLOURS</label>
+<label><input type="checkbox" class="type-filter" value="TOYS"> TOYS</label>
+<!-- add more types as needed -->
+</aside>
+<main class="product-grid" id="productGrid">
+    <!-- Product Card 1 -->
+<div class="card" data-brand="DOMS" data-type="COLOURS">
+  <div class="card-img-wrapper"><span class="badge-brand">DOMS</span><img src="https://domsindia.com/wp-content/uploads/2025/08/162-1-scaled-1.webp"></div>
+  <div class="card-content"><span class="card-type">Colours</span><h3 class="card-title">MINIZ PLASTIC CRAYONS</h3>
+    <button class="shop-now-btn"><i class="fab fa-whatsapp"></i> Shop Now</button>
+    <button class="add-to-cart-btn"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+  </div>
 </div>
-
-</div>
-
-      </div>
-    </header>
-  <!--                Header End                        -->
-
-    <section>
-        <h2 class="section-title">Our Premium Collections</h2>
-        <div class="product-page-container">
-            <aside class="sidebar">
-                <h3>Filter by Brand</h3>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="DOMS"> DOMS</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="CLASSMATE"> CLASSMATE</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="FLAIR"> FLAIR</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="CAMLIN"> CAMLIN</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="PARKER"> PARKER</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="NAVNEET"> NAVNEET</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="PARKER"> PARKER</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="CELLO"> CELLO</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="NATRAJ"> NATRAJ</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="APSARA"> APSARA</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="HAUSAR"> HAUSAR</label>
-                <label class="filter-item"><input type="checkbox" class="brand-filter" value="FABER-CASTELL"> FABER-CASTELL</label>
-                <br>
-                <h3>Filter by Type</h3>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="PENS"> PENS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="NOTEBOOK"> NOTEBOOKS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="P-A"> PENCIL & ACCESSORIES</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="BAGS"> BAGS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="F-F"> FILE & FOLDERS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="PAPER"> PAPER</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="CRAFT-ITEMS"> CRAFT ITEMS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="GIFTS"> GIFTS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="DIARY"> DIARY</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="WRITING-INSTRUMENT"> WRITING INSTRUMENT</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="BOARDS"> BOARDS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="COLOURS"> COLOURS</label>
-                <label class="filter-item"><input type="checkbox" class="type-filter" value="TOYS"> TOYS</label>
-             </aside>
-
-            <main class="product-grid" id="productGrid">
-                <!-- Product Card 1 -->
-                <div class="card" data-brand="DOMS" data-type="COLOURS">
-                    <div class="card-img-wrapper">
-                        <span class="badge-brand">DOMS</span>
-                        <img src="https://domsindia.com/wp-content/uploads/2025/08/162-1-scaled-1.webp" alt="MINIZ">
-                    </div>
-                    <div class="card-content">
-                        <span class="card-type">Colours</span>
-                        <h3 class="card-title">MINIZ PLASTIC CRAYONS</h3>
-                        <p></p>
-                      <button type="button" class="shop-now-btn">
-  <i class="fab fa-whatsapp"></i> Shop Now
-</button>
-
-                     <button type="button" class="add-to-cart-btn">
-  <i class="fas fa-cart-plus"></i> Add to Cart
-</button>
-
-                    </div>
-
-                </div>
-
-                <!-- Product Card 2 -->
+<!-- Product Card 2 -->
                 <div class="card" data-brand="DOMS" data-type="P-A">
                     <div class="card-img-wrapper">
                         <span class="badge-brand">DOMS</span>
@@ -102,7 +169,7 @@
 
                     </div>
                 </div>
-                <!-- Product Card 3 -->
+<!-- Product Card 3 -->
                 <div class="card" data-brand="DOMS" data-type="COLOURS">
                     <div class="card-img-wrapper">
                         <span class="badge-brand">DOMS</span>
@@ -276,76 +343,296 @@
             </main>
         </div>
     </section>
-    <!--                Footer Start                        -->
-   <footer class="footer">
-        <div class="footer-column">
-            <h3>Address</h3>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Main Market Selaqui</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Opposite Punjab National Bank</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Chakarata Road</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Dehradun Uttarakhand</p></a>
-            </div>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Contact Us</h3>
-            <div class="footer-item">
-                <i class="fas fa-phone"></i>
-                <a href="tel:919411136634"><p>Phone: +91-9411136634</p></a>
-            </div>
-            <div class="footer-item">
-                <i class="fas fa-envelope"></i>
-                <a href="https:ramolastationery@gmail.com"><p>Email: ramolastationery@gmail.com</p></a>
-            </div>
-            <div class="footer-item">
-                <i class="fab fa-whatsapp"></i>
-                <a href="https://wa.me/9149151622"><p>WhatsApp: +91-9149151622</p></a>
-            </div>
-        </div>
-        
-        <div class="footer-column">
-            <h3>Follow Us</h3>
-            <div class="social-links">
-                <a href="https://www.instagram.com/ramolastationery/" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" aria-label="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" aria-label="Twitter">
-                    <i class="fab fa-twitter"></i>
-                </a>
-            </div>
-        </div>
-    </footer>
-  <!--                Footer End                        -->
 
-    <script src="filter.js"></script>
+<footer class="footer">
+<div class="footer-column">
+<h3>Address</h3>
+<p>Main Market Selaqui, Opposite Punjab National Bank, Dehradun, Uttarakhand</p>
+</div>
+<div class="footer-column">
+<h3>Contact Us</h3>
+<p>Phone: +91-9411136634</p>
+<p>Email: ramolastationery@gmail.com</p>
+<p>WhatsApp: +91-9149151622</p>
+</div>
+<div class="footer-column">
+<h3>Follow Us</h3>
+<div class="social-links">
+<a href="#"><i class="fab fa-instagram"></i></a>
+<a href="#"><i class="fab fa-facebook-f"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+</div>
+</div>
+</footer>
+
 <!-- Cart Panel -->
 <div class="cart-panel" id="cartPanel">
-  <div class="cart-header">
-    <h3>Your Cart</h3>
-    <button class="close-cart" id="closeCart">×</button>
-  </div>
-
+  <div class="cart-header"><h3>Your Cart</h3><button class="close-cart" id="closeCart">×</button></div>
   <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer"><button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button></div>
+</div>
+<div class="cart-overlay" id="cartOverlay"></div>
 
-  <div class="cart-footer">
-    <button class="checkout-btn" id="checkoutBtn">
-      Proceed to Checkout
-    </button>
-  </div>
+<!-- Modal -->
+<div id="customerModal" class="modal">
+<div class="modal-box">
+<h3>Customer Details</h3>
+<input id="custName" placeholder="Full Name" required>
+<input id="custPhone" placeholder="Phone Number" required>
+<input id="custAddress" placeholder="Address" required>
+<button id="confirmOrderBtn">Place Order</button>
+</div>
 </div>
 
-<!-- Overlay -->
-<div class="cart-overlay" id="cartOverlay"></div>
+<script>
+/* ================= FILTER ================= */
+document.addEventListener("DOMContentLoaded", function () {
+
+  const brandFilters = document.querySelectorAll(".brand-filter");
+  const typeFilters  = document.querySelectorAll(".type-filter");
+  const products     = document.querySelectorAll(".card");
+
+  function applyFilter() {
+    const brands = [...brandFilters].filter(b => b.checked).map(b => b.value);
+    const types  = [...typeFilters].filter(t => t.checked).map(t => t.value);
+
+    products.forEach(card => {
+      const brandMatch = brands.length === 0 || brands.includes(card.dataset.brand);
+      const typeMatch  = types.length === 0  || types.includes(card.dataset.type);
+      card.style.display = (brandMatch && typeMatch) ? "block" : "none";
+    });
+  }
+
+  [...brandFilters, ...typeFilters].forEach(el =>
+    el.addEventListener("change", applyFilter)
+  );
+
+});
+
+/* ================= CART ================= */
+document.addEventListener("DOMContentLoaded", function () {
+
+  const WA_NUMBER = "918936969575";
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const cartCount   = document.getElementById("cartCount");
+  const cartPanel   = document.getElementById("cartPanel");
+  const cartOverlay = document.getElementById("cartOverlay");
+  const cartItems   = document.getElementById("cartItems");
+  const cartIcon    = document.getElementById("cartIcon");
+  const closeCart   = document.getElementById("closeCart");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  const modal       = document.getElementById("customerModal");
+  const confirmBtn  = document.getElementById("confirmOrderBtn");
+
+  /* ===== Helpers ===== */
+  function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    cartCount.textContent = cart.reduce((t, i) => t + i.qty, 0);
+  }
+
+  function openCart() {
+    cartPanel.classList.add("open");
+    cartOverlay.classList.add("show");
+    renderCart();
+  }
+
+  function closeCartPanel() {
+    cartPanel.classList.remove("open");
+    cartOverlay.classList.remove("show");
+  }
+
+  function renderCart() {
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = "<p style='text-align:center'>Cart is empty</p>";
+      return;
+    }
+
+    cart.forEach((item, i) => {
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <img src="${item.image}">
+        <div class="cart-info">
+          <h4>${item.product}</h4>
+          <small>${item.brand} • ${item.type}</small>
+          <div class="cart-actions">
+            <button class="qty-btn" data-i="${i}" data-d="-1">−</button>
+            <span>${item.qty}</span>
+            <button class="qty-btn" data-i="${i}" data-d="1">+</button>
+            <button class="remove-btn" data-i="${i}">×</button>
+          </div>
+        </div>
+      `;
+      cartItems.appendChild(div);
+    });
+  }
+
+  /* ===== Qty / Remove (event delegation) ===== */
+  cartItems.addEventListener("click", function (e) {
+    if (e.target.classList.contains("qty-btn")) {
+      const i = +e.target.dataset.i;
+      const d = +e.target.dataset.d;
+      cart[i].qty += d;
+      if (cart[i].qty <= 0) cart.splice(i, 1);
+      saveCart();
+      renderCart();
+    }
+
+    if (e.target.classList.contains("remove-btn")) {
+      const i = +e.target.dataset.i;
+      cart.splice(i, 1);
+      saveCart();
+      renderCart();
+    }
+  });
+
+  /* ===== Open / Close Cart ===== */
+  cartIcon.addEventListener("click", openCart);
+  cartOverlay.addEventListener("click", closeCartPanel);
+  closeCart.addEventListener("click", closeCartPanel);
+
+  /* ===== Add to Cart ===== */
+  document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const card = this.closest(".card");
+      const product = card.querySelector(".card-title").innerText.trim();
+
+      let existing = cart.find(i => i.product === product);
+
+      if (existing) existing.qty++;
+      else {
+        cart.push({
+          brand: card.dataset.brand,
+          product,
+          type: card.querySelector(".card-type").innerText.trim(),
+          image: card.querySelector("img").src,
+          qty: 1
+        });
+      }
+
+      saveCart();
+      openCart();
+    });
+  });
+
+  /* ===== Shop Now (same as add, no redirect) ===== */
+  document.querySelectorAll(".shop-now-btn").forEach(btn => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const card = this.closest(".card");
+      const product = card.querySelector(".card-title").innerText.trim();
+
+      let existing = cart.find(i => i.product === product);
+      if (existing) existing.qty++;
+      else {
+        cart.push({
+          brand: card.dataset.brand,
+          product,
+          type: card.querySelector(".card-type").innerText.trim(),
+          image: card.querySelector("img").src,
+          qty: 1
+        });
+      }
+
+      saveCart();
+      openCart();
+    });
+  });
+
+  /* ===== Checkout ===== */
+  checkoutBtn.addEventListener("click", function () {
+    if (cart.length === 0) {
+      alert("Cart is empty");
+      return;
+    }
+    modal.style.display = "flex";
+  });
+
+  /* ===== Confirm Order ===== */
+  confirmBtn.addEventListener("click", function () {
+
+    const name    = document.getElementById("custName").value.trim();
+    const phone   = document.getElementById("custPhone").value.trim();
+    const address = document.getElementById("custAddress").value.trim();
+
+    if (!name || !phone || !address) {
+      alert("Please fill all details");
+      return;
+    }
+
+    const orderId = "ORD-" + Date.now();
+
+    let text =
+`🧾 ORDER ID: ${orderId}
+
+👤 ${name}
+📞 ${phone}
+🏠 ${address}
+
+🛒 ITEMS:\n`;
+
+    cart.forEach((i, n) => {
+      text +=
+`${n + 1}. ${i.product}
+Brand: ${i.brand}
+Type: ${i.type}
+Qty: ${i.qty}
+Link: ${i.image}\n\n`;
+    });
+
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwfp8QXotRL5cQVl6nfHJBmEJC0N3wEbyKzdbMbfNNeGpoONsGPdONmeBcp-u18iQc/exec";
+
+fetch(SHEET_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    orderId,
+    name,
+    phone,
+    address,
+    items: cart.map(i => ({
+      brand: i.brand,
+      product: i.product,
+      type: i.type,
+      qty: i.qty,
+      image: i.image
+    }))
+  })
+})
+.then(res => res.json())
+.then(data => console.log("Saved:", data))
+.catch(err => console.error("Error:", err));
+
+
+
+window.open(
+  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`,
+  "_blank"
+);
+
+    cart = [];
+    localStorage.removeItem("cart");
+    saveCart();
+    renderCart();
+    closeCartPanel();
+    modal.style.display = "none";
+  });
+
+  saveCart();
+  renderCart();
+
+});
+
+</script>
 
 </body>
 </html>

@@ -1,91 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | Ramola Pustak Bhandar</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-     <!--                Header start                        -->
-     <header>
-      <div class="navbar">
-         <div class="nav1"><a href="index.html">HOME</a></div>
-         <div class="nav2"><a href="products.html">PRODUCT</a></div>
-         <div class="nav3"><a href="about.html">ABOUT</a></div>
-         <div class="nav4"><a href="contact.html">Contuct Us</a></div>
-      </div>
-    </header>
-  <!--                Header End                        -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | Ramola Pustak Bhandar</title>
 
-    <section>
-        <h2 class="section-title">Contact Us</h2>
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <div><i class="fas fa-map-marker-alt"></i> Main Market Selaqui, Dehradun, Uttarakhand</div>
-                <div><i class="fas fa-phone"></i> +91 9411136634</div>
-                <div><i class="fas fa-envelope"></i> ramolastationery@gmail.com</div>
-                <div><i class="fab fa-instagram"></i> @ramolastationery</div>
-            </div>
-            <form>
-                <input type="text" placeholder="Name" required>
-                <input type="email" placeholder="Email" required>
-                <textarea placeholder="Your Message" rows="5" required></textarea>
-                <button type="submit" class="btn">Send Inquiry</button>
-            </form>
-        </div>
-    </section>
-    <!--                Footer Start                        -->
-   <footer class="footer">
-        <div class="footer-column">
-            <h3>Address</h3>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Main Market Selaqui</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Opposite Punjab National Bank</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Chakarata Road</p></a>
-            </div>
-            <div class="footer-item">
-                <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Dehradun Uttarakhand</p></a>
-            </div>
-        </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+/* ===== COMMON ===== */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+:root {
+    --primary: #002147;
+    --accent: #D4AF37;
+    --white: #ffffff;
+    --grey: #f4f4f4;
+    --dark: #1a1a1a;
+    --shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ===== HEADER (UNCHANGED) ===== */
+header { 
+    background: var(--primary); 
+    padding: 0.5rem 1%; 
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.navbar{
+    background-color: var(--primary);
+    color: white;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.nav1 a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 1px; 
+    transition: 0.3s; 
+}
+.nav2 a, .nav3 a, .nav4 a {
+    text-decoration: none;
+    color: var(--white);
+}
+.navbar a:hover{
+    color: var(--accent);
+}
+
+/* ===== CONTACT PAGE ===== */
+.contact-page {
+  padding: 70px 20px;
+  background: linear-gradient(135deg, #eef2f7, #e3e9f1);
+}
+
+.contact-container {
+  max-width: 1100px;
+  margin: auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+/* LEFT */
+.contact-info h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+.contact-info p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+.info-box {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+.info-box i {
+  font-size: 22px;
+  color: #002147;
+}
+.info-box h4 {
+  margin: 0;
+  font-size: 16px;
+}
+.info-box p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* RIGHT */
+.contact-form h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #002147;
+  outline: none;
+}
+.contact-form button {
+  width: 100%;
+  padding: 14px;
+  background: #002147;
+  color: #D4AF37;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.contact-form button:hover {
+  background: #D4AF37;
+  color: #002147;
+}
+
+/* ===== FOOTER (UNCHANGED) ===== */
+.footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            border-top: 5px solid #e74c3c;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin: 20px;
+        }
+
+        .footer-column h3 {
+            color: #e74c3c;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .footer-item:hover {
+            transform: translateX(10px);
+            color: #3498db;
+        }
         
-        <div class="footer-column">
-            <h3>Contact Us</h3>
-            <div class="footer-item">
-                <i class="fas fa-phone"></i>
-                <a href="tel:919411136634"><p>Phone: +91-9411136634</p></a>
-            </div>
-            <div class="footer-item">
-                <i class="fas fa-envelope"></i>
-                <a href="https:ramolastationery@gmail.com"><p>Email: ramolastationery@gmail.com</p></a>
-            </div>
-            <div class="footer-item">
-                <i class="fab fa-whatsapp"></i>
-                <a href="https://wa.me/9149151622"><p>WhatsApp: +91-9149151622</p></a>
-            </div>
-        </div>
+        .footer-item a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-item a:hover {
+            color: #3498db;
+        }
+
+        .footer-item i {
+            margin-right: 15px;
+            font-size: 1.2em;
+            color: #95a5a6;
+            transition: color 0.3s ease;
+        }
         
-        <div class="footer-column">
-            <h3>Follow Us</h3>
-            <div class="social-links">
-                <a href="https://www.instagram.com/ramolastationery/" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" aria-label="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" aria-label="Twitter">
-                    <i class="fab fa-twitter"></i>
-                </a>
-            </div>
+        .footer-item:hover i {
+            color: #3498db;
+        }
+
+        .social-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .social-links a {
+            font-size: 1.5em;
+            color: #ecf0f1;
+            margin-right: 20px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #3498db;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-column {
+                min-width: 90%;
+            }
+        }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .contact-container {
+    grid-template-columns: 1fr;
+    padding: 25px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="navbar">
+     <div class="nav1"><a href="index.html">HOME</a></div>
+     <div class="nav2"><a href="products.html">PRODUCT</a></div>
+     <div class="nav3"><a href="about.html">ABOUT</a></div>
+     <div class="nav4"><a href="contact.html">Contact Us</a></div>
+  </div>
+</header>
+
+<!-- ===== CONTACT SECTION ===== -->
+<section class="contact-page">
+  <div class="contact-container">
+
+    <div class="contact-info">
+      <h2>Get in Touch</h2>
+      <p>
+        We’re always happy to help you.  
+        Contact Ramola Pustak Bhandar for any product or order related queries.
+      </p>
+
+      <div class="info-box">
+        <i class="fas fa-map-marker-alt"></i>
+        <div>
+          <h4>Address</h4>
+          <p>Main Market Selaqui, Dehradun</p>
         </div>
-    </footer>
-  <!--                Footer End                        -->
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-phone-alt"></i>
+        <div>
+          <h4>Phone</h4>
+          <p>+91 9411136634</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <i class="fas fa-envelope"></i>
+        <div>
+          <h4>Email</h4>
+          <p>ramolastationery@gmail.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h3>Send Message</h3>
+      <form id="contactForm">
+        <div class="form-group">
+          <input type="text" id="name" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+          <input type="email" id="email" placeholder="Your Email" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" id="phone" placeholder="Phone Number" required>
+        </div>
+        <div class="form-group">
+          <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+        </div>
+        <button type="submit">Send Message on WhatsApp</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-column">
+    <h3>Address</h3>
+    <div class="footer-item">
+        <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Main Market Selaqui</p></a>
+    </div>
+    <div class="footer-item">
+        <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Opposite Punjab National Bank</p></a>
+    </div>
+    <div class="footer-item">
+        <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Chakarata Road</p></a>
+    </div>
+    <div class="footer-item">
+        <a href="https://maps.app.goo.gl/pWR5CnkdNQtkDRYy7"><p>Dehradun Uttarakhand</p></a>
+    </div>
+  </div>
+  
+  <div class="footer-column">
+      <h3>Contact Us</h3>
+      <div class="footer-item">
+          <i class="fas fa-phone"></i>
+          <a href="tel:919411136634"><p>Phone: +91-9411136634</p></a>
+      </div>
+      <div class="footer-item">
+          <i class="fas fa-envelope"></i>
+          <a href="https:ramolastationery@gmail.com"><p>Email: ramolastationery@gmail.com</p></a>
+      </div>
+      <div class="footer-item">
+          <i class="fab fa-whatsapp"></i>
+          <a href="https://wa.me/9149151622"><p>WhatsApp: +91-9149151622</p></a>
+      </div>
+  </div>
+  
+  <div class="footer-column">
+      <h3>Follow Us</h3>
+      <div class="social-links">
+          <a href="https://www.instagram.com/ramolastationery/" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+          </a>
+      </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const msg = document.getElementById("message").value.trim();
+
+  if(!name || !email || !phone || !msg){
+    alert("Please fill all fields");
+    return;
+  }
+
+  const whatsappNumber = "918936969575"; // YOUR WHATSAPP NUMBER
+
+  const text = `📩 *New Message from Website*\n\n👤 Name: ${name}\n📧 Email: ${email}\n📞 Phone: ${phone}\n\n📝 Message:\n${msg}`;
+
+  const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank");
+});
+</script>
+
 </body>
 </html>

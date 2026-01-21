@@ -25,197 +25,165 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+/* ======================
+   GLOBAL CART (ONE TIME)
+====================== */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-document.addEventListener("DOMContentLoaded", () => {
+const cartCount   = document.getElementById("cartCount");
+const cartPanel   = document.getElementById("cartPanel");
+const cartOverlay = document.getElementById("cartOverlay");
+const cartItems   = document.getElementById("cartItems");
+const checkoutBtn = document.getElementById("checkoutBtn");
 
-  const phoneNumber = "918936969575";
-  const sheetURL = "https://script.google.com/macros/s/AKfycbxscmDhD47oCUcUq2vBAPfzXiQS5NrH1XL8ViTYOuS0HlqFAEwZYu7pnuUlRz6jCu-Q/exec";
+const modal       = document.getElementById("customerModal");
+const confirmBtn  = document.getElementById("confirmOrderBtn");
 
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbxY3ZW-Gc3KX9vEsTBBsi32imjMNJHhVLmdk4NQpbTHj3N0zayPPPIXzEtQRmD1SyFC/exec";
+const WA_NUMBER   = "918936969575";
 
-  const cartCount = document.getElementById("cartCount");
-  const cartPanel = document.getElementById("cartPanel");
-  const cartOverlay = document.getElementById("cartOverlay");
-  const cartItems = document.getElementById("cartItems");
-  const cartIcon = document.getElementById("cartIcon");
-  const closeCartBtn = document.getElementById("closeCart");
-  const checkoutBtn = document.getElementById("checkoutBtn");
+/* ======================
+   HELPERS
+====================== */
+function saveCart(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  cartCount.innerText = cart.reduce((s,i)=>s+i.qty,0);
+}
 
-  /* -------------------------
-     UPDATE CART COUNT
-  --------------------------*/
-  function updateCartCount() {
-    cartCount.innerText = cart.reduce((sum, i) => sum + i.qty, 0);
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }
+function openCart(){
+  cartPanel.classList.add("open");
+  cartOverlay.classList.add("show");
+  renderCart();
+}
 
-  updateCartCount();
+function closeCart(){
+  cartPanel.classList.remove("open");
+  cartOverlay.classList.remove("show");
+}
 
-  /* -------------------------
-     ADD TO CART
-  --------------------------*/
-  document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
-    btn.addEventListener("click", e => {
-      e.preventDefault();
-      e.stopPropagation();
+function generateOrderId(){
+  return "ORD-" + Date.now();
+}
 
-      const card = btn.closest(".card");
-      const product = card.querySelector(".card-title").innerText.trim();
-
-      const existing = cart.find(i => i.product === product);
-
-      if (existing) {
-        existing.qty++;
-      } else {
-        cart.push({
-          brand: card.dataset.brand,
-          product,
-          type: card.querySelector(".card-type").innerText.trim(),
-          image: card.querySelector("img").src,
-          qty: 1
-        });
-      }
-
-      updateCartCount();
-    });
-  });
-
-  /* -------------------------
-     OPEN / CLOSE CART
-  --------------------------*/
-  cartIcon.onclick = () => {
-    cartPanel.classList.add("open");
-    cartOverlay.classList.add("show");
-    renderCart();
-  };
-
-  closeCartBtn.onclick = closeCart;
-  cartOverlay.onclick = closeCart;
-
-  function closeCart() {
-    cartPanel.classList.remove("open");
-    cartOverlay.classList.remove("show");
-  }
-
-  /* -------------------------
-     RENDER CART
-  --------------------------*/
-  function renderCart() {
-    cartItems.innerHTML = "";
-
-    cart.forEach((item, index) => {
-      cartItems.innerHTML += `
-        <div class="cart-item">
-          <img src="${item.image}">
-          <div class="cart-info">
-            <h4>${item.product}</h4>
-            <small>${item.brand} • ${item.type}</small>
-
-            <div class="cart-actions">
-              <button class="qty-btn" onclick="changeQty(${index}, -1)">−</button>
-              <span>${item.qty}</span>
-              <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
-              <button class="remove-btn" onclick="removeItem(${index})">×</button>
-            </div>
-          </div>
-        </div>`;
-    });
-  }
-
-  window.changeQty = (index, delta) => {
-    cart[index].qty += delta;
-    if (cart[index].qty <= 0) cart.splice(index, 1);
-    updateCartCount();
-    renderCart();
-  };
-
-  window.removeItem = index => {
-    cart.splice(index, 1);
-    updateCartCount();
-    renderCart();
-  };
-
-  /* -------------------------
-     CHECKOUT → WHATSAPP + SHEET
-  --------------------------*/
-  checkoutBtn.onclick = () => {
-
-    if (!cart.length) {
-      alert("Cart is empty");
-      return;
-    }
-
-    let message = "🛒 NEW ORDER\n\n";
-
-    cart.forEach((item, i) => {
-      message += `${i + 1}. ${item.product}
-Brand: ${item.brand}
-Type: ${item.type}
-Qty: ${item.qty}
-${item.image}\n\n`;
-
-      fetch(sheetURL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({
-          action: "create",
-          ...item
-        })
-      });
-    });
-
-    window.open(
-      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
-
-    cart = [];
-    localStorage.removeItem("cart");
-    updateCartCount();
-    closeCart();
-  };
-
-});
-document.querySelectorAll(".shop-now-btn").forEach(btn => {
-  btn.addEventListener("click", function(e) {
+/* ======================
+   ADD TO CART
+====================== */
+document.querySelectorAll(".add-to-cart-btn, .shop-now-btn").forEach(btn=>{
+  btn.onclick = e=>{
     e.preventDefault();
-    e.stopPropagation();
 
-    const card = this.closest(".card");
+    const card = btn.closest(".card");
+    const product = card.querySelector(".card-title").innerText;
 
-    const item = {
-      brand: card.dataset.brand,
-      product: card.querySelector(".card-title").innerText.trim(),
-      type: card.querySelector(".card-type").innerText.trim(),
-      image: card.querySelector("img").src,
-      qty: 1
-    };
+    let item = cart.find(i=>i.product===product);
 
-    // Add to cart
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existing = cart.find(i => i.product === item.product);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push(item);
+    if(item) item.qty++;
+    else{
+      cart.push({
+        product,
+        brand: card.dataset.brand,
+        type: card.querySelector(".card-type").innerText,
+        image: card.querySelector("img").src,
+        qty: 1
+      });
     }
-    localStorage.setItem("cart", JSON.stringify(cart));
 
-    // Update cart count
-    const cartCountEl = document.getElementById("cartCount");
-    cartCountEl.innerText = cart.reduce((s, i) => s + i.qty, 0);
-
-    // Send to Google Sheet
-    fetch("https://script.google.com/macros/s/AKfycbxscmDhD47oCUcUq2vBAPfzXiQS5NrH1XL8ViTYOuS0HlqFAEwZYu7pnuUlRz6jCu-Q/exec", {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: "create", ...item })
-    }).catch(err => console.error("Sheet error:", err));
-
-    // Open WhatsApp with item
-    const phoneNumber = "918936969575";
-    let message = `🛒 NEW ORDER\n\nBrand: ${item.brand}\nProduct: ${item.product}\nType: ${item.type}\nQty: ${item.qty}\nImage: ${item.image}`;
-    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
-
-  });
+    saveCart();
+    openCart();
+  };
 });
+
+/* ======================
+   CART UI
+====================== */
+document.getElementById("cartIcon").onclick = openCart;
+cartOverlay.onclick = closeCart;
+document.getElementById("closeCart").onclick = closeCart;
+
+function renderCart(){
+  cartItems.innerHTML = "";
+
+  cart.forEach((item,i)=>{
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <strong>${item.product}</strong><br>
+        ${item.brand} • ${item.type}
+
+        <div class="cart-actions">
+          <button onclick="changeQty(${i},-1)">−</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${i},1)">+</button>
+          <button onclick="removeItem(${i})">✕</button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+window.changeQty = (i,d)=>{
+  cart[i].qty += d;
+  if(cart[i].qty<=0) cart.splice(i,1);
+  saveCart();
+  renderCart();
+};
+
+window.removeItem = i=>{
+  cart.splice(i,1);
+  saveCart();
+  renderCart();
+};
+
+/* ======================
+   CHECKOUT
+====================== */
+checkoutBtn.onclick = ()=>{
+  if(!cart.length) return alert("Cart empty");
+  modal.style.display="flex";
+};
+
+confirmBtn.onclick = ()=>{
+  const name = custName.value.trim();
+  const phone = custPhone.value.trim();
+  const address = custAddress.value.trim();
+  if(!name||!phone||!address) return alert("Fill all details");
+
+  const orderId = generateOrderId();
+
+  let itemsText="";
+  cart.forEach((i,n)=>{
+    itemsText += `${n+1}. ${i.product}
+Brand: ${i.brand}
+Type: ${i.type}
+Qty: ${i.qty}\n\n`;
+  });
+
+  fetch(SHEET_URL,{
+    method:"POST",
+    headers:{ "Content-Type":"text/plain;charset=utf-8" },
+    body:JSON.stringify({
+      action:"create",
+      orderId,
+      name,
+      phone,
+      address,
+      products: itemsText
+    })
+  });
+
+  // ⚠️ NO IMAGE LINK → NO PREVIEW
+  window.open(
+    `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+      `ORDER ID: ${orderId}\n\n${itemsText}`
+    )}`,
+    "_blank"
+  );
+
+  cart=[];
+  localStorage.removeItem("cart");
+  saveCart();
+  modal.style.display="none";
+  closeCart();
+};
+
+saveCart();
+renderCart();
