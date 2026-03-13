@@ -12,15 +12,25 @@
 </head>
 <body>
   <!--                Header start                        -->
-     <header>
-      <div class="navbar">
-         <div class="nav1"><a href="index.html">HOME</a></div>
-         <div class="nav2"><a href="products.html">PRODUCT</a></div>
-         <div class="nav3"><a href="about.html">ABOUT</a></div>
-         <div class="nav4"><a href="contact.html">Contact Us</a></div>
-         <div class="nav5"><a href="admin.html">Admin</a></div>
-      </div>
-    </header>
+     <div class="header">
+
+  <div class="logo">
+    <i class="fas fa-store"></i> Ramola Pustak Bhandar
+  </div>
+
+  <nav class="nav-menu" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="products.html">Product</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+  </nav>
+
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <i class="fas fa-bars"></i>
+  </div>
+
+</div>
+
   <!--                Header End                        -->
   <div class="img"><img src="img.png" alt="img"></div> 
   <div class="box">
@@ -102,6 +112,11 @@
         </div>
     </footer>
   <!--                Footer End                        -->                
-    
+ 
+<script>
+    function toggleMenu(){
+  document.getElementById("navMenu").classList.toggle("active");
+}
+</script>
 </body>
 </html>
