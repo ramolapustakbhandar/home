@@ -405,7 +405,8 @@ function renderProducts(list){
     productGrid.innerHTML+=`
     <div class="card">
       <img src="${p.image}"
-        onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
+     loading="lazy"
+     onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
       <div class="card-content">
         <div class="card-category">${p.category||""}</div>
         <div class="card-title">${p.name||""}</div>
@@ -504,17 +505,66 @@ function renderCart(){
 function openCart(){cartPanel.classList.add("open")}
 function closeCart(){cartPanel.classList.remove("open")}
 function checkoutWhatsApp(){
-  if(!cart.length)return alert("Cart empty");
-  let msg="Order:%0A";
-  cart.forEach(i=>msg+=`${i.name} = ₹${i.price*i.qty}%0A`);
-  msg+=`Total: ₹${cart.reduce((t,i)=>t+i.qty*i.price,0)}`;
-  window.open("https://wa.me/919149151622?text="+msg,"_blank");
+  if(!cart.length) return alert("Cart empty");
+  document.getElementById("checkoutModal").style.display="flex";
+}
+
+function closeCheckout(){
+  document.getElementById("checkoutModal").style.display="none";
 }
 renderCart();
 function toggleMenu(){
   document.getElementById("navMenu").classList.toggle("active");
 }
-</script>
+function sendOrder(){
 
+  let name = document.getElementById("custName").value.trim();
+  let phone = document.getElementById("custPhone").value.trim();
+  let address = document.getElementById("custAddress").value.trim();
+
+  if(!name || !phone || !address){
+    return alert("Please fill all details");
+  }
+
+  let msg = "🛒 *New Order - Ramola Pustak Bhandar* %0A%0A";
+
+  msg += "👤 Name: " + name + "%0A";
+  msg += "📞 Phone: " + phone + "%0A";
+  msg += "📍 Address: " + address + "%0A%0A";
+
+  msg += "📦 *Order Details:* %0A";
+
+  cart.forEach(i=>{
+    msg += `• ${i.name} (Qty: ${i.qty}) = ₹${i.price*i.qty}%0A`;
+  });
+
+  let total = cart.reduce((t,i)=>t+i.qty*i.price,0);
+  msg += "%0A💰 *Total: ₹" + total + "*";
+
+  window.open("https://wa.me/919149151622?text="+msg,"_blank");
+
+  closeCheckout();
+}
+</script>
+<div id="checkoutModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:3000;justify-content:center;align-items:center;">
+  
+  <div style="background:#fff;padding:20px;border-radius:10px;width:90%;max-width:400px;">
+    
+    <h3>Enter Details</h3>
+
+    <input type="text" id="custName" placeholder="Your Name" style="width:100%;padding:8px;margin:8px 0;">
+    <input type="tel" id="custPhone" placeholder="Phone Number" style="width:100%;padding:8px;margin:8px 0;">
+    <textarea id="custAddress" placeholder="Address" style="width:100%;padding:8px;margin:8px 0;"></textarea>
+
+    <button onclick="sendOrder()" style="width:100%;padding:10px;background:#25D366;color:#fff;border:none;border-radius:6px;">
+      Confirm Order
+    </button>
+
+    <button onclick="closeCheckout()" style="width:100%;margin-top:8px;padding:8px;background:#ccc;border:none;">
+      Cancel
+    </button>
+
+  </div>
+</div>
 </body>
 </html>
