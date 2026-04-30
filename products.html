@@ -381,6 +381,23 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
     </footer>
   <!--                Footer End                        -->                
 <script>
+  const SHOP_LAT = 30.354989483845266;
+const SHOP_LNG = 77.85693188301903;
+function getDistance(lat1, lon1, lat2, lon2){
+  const R = 6371; // km
+  const dLat = (lat2-lat1) * Math.PI/180;
+  const dLon = (lon2-lon1) * Math.PI/180;
+
+  const a =
+    Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180) *
+    Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLon/2)*Math.sin(dLon/2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
 const SHEET_URL =
 "https://opensheet.elk.sh/10GIljGz8ZqNsznhjsxMzWSZkG76vRJjOjPqAqMJT5Ag/Product%20List";
 
@@ -517,6 +534,18 @@ function toggleMenu(){
   document.getElementById("navMenu").classList.toggle("active");
 }
 function sendOrder(){
+  if(!window.userLat || !window.userLng){
+  return alert("Please use 'Current Location' button");
+}
+
+let distance = getDistance(SHOP_LAT, SHOP_LNG, userLat, userLng);
+distance = distance.toFixed(2);
+
+let deliveryCharge = getDeliveryCharge(distance);
+
+if(deliveryCharge === -1){
+  return alert("Sorry, delivery not available at your location");
+}
 
   let name = document.getElementById("custName").value.trim();
   let phone = document.getElementById("custPhone").value.trim();
@@ -531,6 +560,8 @@ function sendOrder(){
   msg += "👤 Name: " + name + "%0A";
   msg += "📞 Phone: " + phone + "%0A";
   msg += "📍 *Delivery Address:* %0A" + address + "%0A%0A";
+  msg += `🚚 Distance: ${distance} km%0A`;
+ msg += `💵 Delivery: ₹${deliveryCharge}%0A%0A`;
 
   msg += "📦 *Order Details:* %0A";
 
@@ -539,7 +570,9 @@ function sendOrder(){
   });
 
   let total = cart.reduce((t,i)=>t+i.qty*i.price,0);
-  msg += "%0A💰 *Total: ₹" + total + "*";
+let finalTotal = total + deliveryCharge;
+
+msg += "%0A💰 *Total: ₹" + finalTotal + "*";
 
   window.open("https://wa.me/919149151622?text="+msg,"_blank");
 
@@ -551,7 +584,8 @@ async function getLocation(){
   if(!navigator.geolocation){
     return alert("Geolocation not supported");
   }
-
+ window.userLat = lat;
+ window.userLng = lng;
   navigator.geolocation.getCurrentPosition(async position => {
 
     let lat = position.coords.latitude;
@@ -584,6 +618,14 @@ async function getLocation(){
   }, () => {
     alert("Location access denied");
   });
+}
+function getDeliveryCharge(distance){
+
+  if(distance <= 2) return 0;        // Free delivery
+  if(distance <= 5) return 20;
+  if(distance <= 8) return 40;
+
+  return -1; // Outside service area
 }
 </script>
 <div id="checkoutModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:3000;justify-content:center;align-items:center;">
