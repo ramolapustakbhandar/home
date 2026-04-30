@@ -518,12 +518,16 @@ function renderCart(){
   });
   cartCount.innerText=qty;
   cartTotal.innerText="Total: ₹"+total;
+  updateChargesUI();
 }
 function openCart(){cartPanel.classList.add("open")}
 function closeCart(){cartPanel.classList.remove("open")}
 function checkoutWhatsApp(){
   if(!cart.length) return alert("Cart empty");
+
   document.getElementById("checkoutModal").style.display="flex";
+
+  updateChargesUI();
 }
 
 function closeCheckout(){
@@ -534,18 +538,19 @@ function toggleMenu(){
   document.getElementById("navMenu").classList.toggle("active");
 }
 function sendOrder(){
+
   if(!window.userLat || !window.userLng){
-  return alert("Please use 'Current Location' button");
-}
+    return alert("Please use 'Current Location' button");
+  }
 
-let distance = getDistance(SHOP_LAT, SHOP_LNG, userLat, userLng);
-let deliveryCharge = getDeliveryCharge(distance);
+  let distance = getDistance(SHOP_LAT, SHOP_LNG, userLat, userLng);
+  let deliveryCharge = getDeliveryCharge(distance);
 
-distance = distance.toFixed(2); 
+  distance = distance.toFixed(2);
 
-if(deliveryCharge === -1){
-  return alert("Sorry, delivery not available at your location");
-}
+  if(deliveryCharge === -1){
+    return alert("Sorry, delivery not available at your location");
+  }
 
   let name = document.getElementById("custName").value.trim();
   let phone = document.getElementById("custPhone").value.trim();
@@ -555,26 +560,44 @@ if(deliveryCharge === -1){
     return alert("Please fill all details");
   }
 
+  // ✅ Calculate totals properly
+  let total = cart.reduce((t,i)=>t+i.qty*i.price,0);
+  let smallCartCharge = getSmallCartCharge(total);
+  let finalTotal = total + deliveryCharge + smallCartCharge;
+
+  // ✅ Message
   let msg = "🛒 *New Order - Ramola Pustak Bhandar* %0A%0A";
 
   msg += "👤 Name: " + name + "%0A";
   msg += "📞 Phone: " + phone + "%0A";
   msg += "📍 *Delivery Address:* %0A" + address + "%0A%0A";
-  msg += `🚚 Distance: ${distance} km%0A`;
- msg += `💵 Delivery: ₹${deliveryCharge}%0A%0A`;
 
-  msg += "📦 *Order Details:* %0A";
+  msg += `🚚 Distance: ${distance} km%0A`;
+  msg += `💵 Delivery: ₹${deliveryCharge}%0A`;
+
+  if(smallCartCharge > 0){
+    msg += `🧾 Small Order Fee: ₹${smallCartCharge}%0A`;
+  }
+
+  msg += "%0A📦 *Order Details:* %0A";
 
   cart.forEach(i=>{
     msg += `• ${i.name} (Qty: ${i.qty}) = ₹${i.price*i.qty}%0A`;
   });
 
-  let total = cart.reduce((t,i)=>t+i.qty*i.price,0);
-let finalTotal = total + deliveryCharge;
+  msg += `%0A💰 *Total: ₹${finalTotal}*`;
 
-msg += "%0A💰 *Total: ₹" + finalTotal + "*";
+  let confirmMsg =
+"Total: ₹" + finalTotal +
+"\nDelivery: ₹" + deliveryCharge +
+"\nSmall Fee: ₹" + smallCartCharge +
+"\n\nConfirm Order?";
 
-  window.open("https://wa.me/919149151622?text="+msg,"_blank");
+if(!confirm(confirmMsg)){
+  return;
+}
+
+window.open("https://wa.me/919149151622?text="+msg,"_blank");
 
   closeCheckout();
 }
@@ -614,7 +637,8 @@ async function getLocation(){
       document.getElementById("custAddress").value =
         address + " | " + mapLink;
 
-      updateDeliveryUI(); // ✅ IMPORTANT
+      updateDeliveryUI();
+      updateChargesUI();
 
     }catch(e){
       document.getElementById("custAddress").value =
@@ -647,6 +671,37 @@ function updateDeliveryUI(){
 
   console.log("Distance:", distance, "Delivery:", deliveryCharge, "Total:", finalTotal);
 }
+function getSmallCartCharge(total){
+  if(total <= 50) return 30;
+  if(total <= 100) return 20;
+  if(total <= 200) return 10;
+  return 0;
+}
+function updateChargesUI(){
+
+  let total = cart.reduce((t,i)=>t+i.qty*i.price,0);
+  let smallCartCharge = getSmallCartCharge(total);
+
+  let msg = "";
+
+  if(smallCartCharge > 0){
+
+    let needed = 0;
+
+    if(total <= 50){
+      needed = 51 - total;
+    }else if(total <= 100){
+      needed = 101 - total;
+    }
+
+    msg += `🧾 Small order fee: ₹${smallCartCharge}<br>`;
+    msg += `💡 Add ₹${needed} more to avoid this charge`;
+  }else{
+    msg += `✅ No small order fee`;
+  }
+
+  document.getElementById("chargesBox").innerHTML = msg;
+}
 </script>
 <div id="checkoutModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:3000;justify-content:center;align-items:center;">
   
@@ -661,7 +716,8 @@ function updateDeliveryUI(){
 style="width:100%;padding:8px;background:#000;color:#fff;border:none;border-radius:5px;margin:6px 0;">
 📍 Use My Current Location
 </button>
-
+<div id="chargesBox" style="font-size:14px;margin:10px 0;color:#000;"></div>
+<div id="chargesBox"></div>
     <button onclick="sendOrder()" style="width:100%;padding:10px;background:#25D366;color:#fff;border:none;border-radius:6px;">
       Confirm Order
     </button>
