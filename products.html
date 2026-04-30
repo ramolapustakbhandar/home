@@ -530,7 +530,7 @@ function sendOrder(){
 
   msg += "👤 Name: " + name + "%0A";
   msg += "📞 Phone: " + phone + "%0A";
-  msg += "📍 Address: " + address + "%0A%0A";
+  msg += "📍 Address: " + address + "%0A";
 
   msg += "📦 *Order Details:* %0A";
 
@@ -544,6 +544,26 @@ function sendOrder(){
   window.open("https://wa.me/919149151622?text="+msg,"_blank");
 
   closeCheckout();
+}
+function getLocation(){
+
+  if(!navigator.geolocation){
+    return alert("Geolocation not supported");
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      let lat = position.coords.latitude;
+      let lng = position.coords.longitude;
+
+      let mapLink = `https://www.google.com/maps?q=${lat},${lng}`;
+
+      document.getElementById("custAddress").value = mapLink;
+    },
+    () => {
+      alert("Location access denied");
+    }
+  );
 }
 </script>
 <div id="checkoutModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:3000;justify-content:center;align-items:center;">
@@ -566,5 +586,9 @@ function sendOrder(){
 
   </div>
 </div>
+<button onclick="getLocation()" 
+style="width:100%;padding:8px;background:#000;color:#fff;border:none;border-radius:5px;margin:6px 0;">
+📍 Use My Current Location
+</button>
 </body>
 </html>
