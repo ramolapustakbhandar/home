@@ -120,9 +120,33 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
   overflow:hidden;transition:.2s
 }
 .card:hover{transform:translateY(-4px)}
-.card img{
-  width:100%;height:170px;
-  object-fit:contain;background:#fafafa
+
+.image-box{
+  position: relative;
+  width: 100%;
+  height: 170px;
+  overflow: hidden;
+  background:#fafafa;
+}
+
+/* Background image */
+.bg-img{
+  width: 100%;
+  height: 100%;
+  display:block;
+}
+
+/* Product image centered */
+.product-img{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 75%;
+  height: 75%;
+
+  object-fit: contain;
 }
 .card-content{padding:12px}
 .card-title{font-size:14px;font-weight:600}
@@ -137,6 +161,72 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
   background:#000;color:#fff;cursor:pointer
 }
 .card button:disabled{background:#ccc;cursor:not-allowed}
+
+/* DISCOUNT BADGE */
+.card {
+  position: relative;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  background: linear-gradient(135deg, #e53935, #c62828);
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  padding: 5px 8px;
+  border-radius: 6px;
+
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+/* PRICE ROW */
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* MRP IMPROVE */
+.mrp {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 12px;
+}
+
+/* SAVE TEXT */
+.save-text {
+  font-size: 12px;
+  color: #2e7d32;
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+/* BUTTON UPGRADE */
+.card button {
+  width: 100%;
+  padding: 9px;
+  border: none;
+  border-radius: 6px;
+
+  background: linear-gradient(135deg, #000, #333);
+  color: #fff;
+
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.card button:hover {
+  background: linear-gradient(135deg, #ffcc00, #ffb300);
+  color: #000;
+  transform: scale(1.03);
+}
 
 /* CART */
 .cart-btn{
@@ -381,22 +471,7 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
     </footer>
   <!--                Footer End                        -->                
 <script>
-  const SHOP_LAT = 30.354989483845266;
-const SHOP_LNG = 77.85693188301903;
-function getDistance(lat1, lon1, lat2, lon2){
-  const R = 6371; // km
-  const dLat = (lat2-lat1) * Math.PI/180;
-  const dLon = (lon2-lon1) * Math.PI/180;
-
-  const a =
-    Math.sin(dLat/2)*Math.sin(dLat/2) +
-    Math.cos(lat1*Math.PI/180) *
-    Math.cos(lat2*Math.PI/180) *
-    Math.sin(dLon/2)*Math.sin(dLon/2);
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
+  
 
 const SHEET_URL =
 "https://opensheet.elk.sh/10GIljGz8ZqNsznhjsxMzWSZkG76vRJjOjPqAqMJT5Ag/Product%20List";
@@ -415,28 +490,66 @@ fetch(SHEET_URL)
 })
 .catch(()=>alert("Error loading products. Check sheet sharing."));
 
+function getDiscountBadge(p){
+  let price = Number(p.price||0);
+  let mrp = Number(p.mrp||0);
+
+  if(mrp > price){
+    let discount = Math.round(((mrp - price) / mrp) * 100);
+    return `<div class="discount-badge">${discount}% OFF</div>`;
+  }
+  return "";
+}
+
+function getDiscountText(p){
+  let price = Number(p.price||0);
+  let mrp = Number(p.mrp||0);
+
+  if(mrp > price){
+    let save = mrp - price;
+    return `<div class="save-text">You save ₹${save}</div>`;
+  }
+  return "";
+}
+
 function renderProducts(list){
-  productGrid.innerHTML="";
-  list.forEach(p=>{
-    const out=Number(p.stock)<=0;
-    productGrid.innerHTML+=`
+  productGrid.innerHTML = "";
+  
+  list.forEach(p => {
+
+    const out = Number(p.stock) <= 0;
+
+    productGrid.innerHTML += `
     <div class="card">
-      <img src="${p.image}"
-     loading="lazy"
-     onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
+
+      ${getDiscountBadge(p)}
+
+     <div class="image-box">
+  <img class="bg-img" src="${p.image || ''}">
+  <img class="product-img" src="${p.image1 || p.image || ''}">
+</div>
+
       <div class="card-content">
         <div class="card-category">${p.category||""}</div>
         <div class="card-title">${p.name||""}</div>
-        <div>
+
+        <div class="price-row">
           <span class="price">₹${p.price||0}</span>
-          <span class="mrp">₹${p.mrp||""}</span>
+          ${Number(p.mrp) > Number(p.price) ? `<span class="mrp">₹${p.mrp}</span>` : ""}
         </div>
+
+        ${getDiscountText(p)}
+
         <div class="stock ${out?'out':'in'}">
           ${out?'Out of Stock':'In Stock'}
         </div>
+
         <button ${out?'disabled':''}
-          onclick='addToCart(${JSON.stringify(p)})'>Add to Cart</button>
+          onclick='addToCart(${JSON.stringify(p)})'>
+          Add to Cart
+        </button>
       </div>
+
     </div>`;
   });
 }
@@ -479,12 +592,36 @@ function clearFilters(){
   document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
   renderProducts(allProducts);
 }
+// ----------------------cart---------------------------------//
+const SHOP_LAT = 30.354989483845266;
+const SHOP_LNG = 77.85693188301903;
+function getDistance(lat1, lon1, lat2, lon2){
+  const R = 6371; // km
+  const dLat = (lat2-lat1) * Math.PI/180;
+  const dLon = (lon2-lon1) * Math.PI/180;
+
+  const a =
+    Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180) *
+    Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLon/2)*Math.sin(dLon/2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
 
 function addToCart(p){
-  let i=cart.find(x=>x.id===p.id);
-  if(i)i.qty++;
-  else cart.push({...p,qty:1});
-  saveCart();openCart();
+  if(!p.image){
+    p.image = "https://via.placeholder.com/60";
+  }
+
+  let i = cart.find(x => x.id === p.id);
+
+  if(i) i.qty++;
+  else cart.push({...p, qty:1});
+
+  saveCart();
+  openCart();
 }
 function changeQty(i,d){
   cart[i].qty+=d;
@@ -502,7 +639,7 @@ function renderCart(){
     total+=i.qty*i.price;qty+=i.qty;
     cartItems.innerHTML+=`
     <div class="cart-item">
-      <img src="${i.image}">
+      <img src="${i.image}" onerror="this.src='https://via.placeholder.com/60'">
       <div>
         <div style="font-weight:600">${i.name}</div>
         <div>₹${i.price}</div>
@@ -597,7 +734,7 @@ if(!confirm(confirmMsg)){
   return;
 }
 
-window.open("https://wa.me/919149151622?text="+msg,"_blank");
+window.open("https://wa.me/918936969575?text="+msg,"_blank");
 
   closeCheckout();
 }
@@ -674,7 +811,7 @@ function updateDeliveryUI(){
 function getSmallCartCharge(total){
   if(total <= 50) return 30;
   if(total <= 100) return 20;
-  if(total <= 200) return 10;
+  if(total <= 150) return 10;
   return 0;
 }
 function updateChargesUI(){
@@ -692,6 +829,8 @@ function updateChargesUI(){
       needed = 51 - total;
     }else if(total <= 100){
       needed = 101 - total;
+    }else if(total <= 150){
+      needed = 151 - total;
     }
 
     msg += `🧾 Small order fee: ₹${smallCartCharge}<br>`;
@@ -702,6 +841,7 @@ function updateChargesUI(){
 
   document.getElementById("chargesBox").innerHTML = msg;
 }
+//------------------------cart end----------------------//
 </script>
 <div id="checkoutModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:3000;justify-content:center;align-items:center;">
   
@@ -717,7 +857,6 @@ style="width:100%;padding:8px;background:#000;color:#fff;border:none;border-radi
 📍 Use My Current Location
 </button>
 <div id="chargesBox" style="font-size:14px;margin:10px 0;color:#000;"></div>
-<div id="chargesBox"></div>
     <button onclick="sendOrder()" style="width:100%;padding:10px;background:#25D366;color:#fff;border:none;border-radius:6px;">
       Confirm Order
     </button>
