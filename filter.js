@@ -187,7 +187,3 @@ Qty: ${i.qty}\n\n`;
 
 saveCart();
 renderCart();
-
-function toggleMenu(){
-  document.getElementById("navMenu").classList.toggle("active");
-}
