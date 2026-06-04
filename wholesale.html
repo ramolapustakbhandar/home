@@ -83,7 +83,38 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
   }
 
 }
+.profile-menu{
+position:relative;
+}
 
+.profile-btn{
+cursor:pointer;
+font-size:14px;
+}
+
+.profile-dropdown{
+display:none;
+position:absolute;
+right:0;
+top:35px;
+background:#fff;
+color:#000;
+width:220px;
+padding:12px;
+border-radius:8px;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+z-index:9999;
+}
+
+.profile-dropdown button{
+width:100%;
+padding:8px;
+background:#c62828;
+color:#fff;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
 /* SEARCH */
 .search-box{padding:12px;background:#fff}
 .search-box input{
@@ -105,6 +136,21 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
 .clear-btn{
   width:100%;padding:8px;margin-top:10px;
   background:#c62828;color:#fff;border:none;border-radius:5px;cursor:pointer
+}
+.wholesale-banner{
+  background:#ffcc00;
+  color:#000;
+  text-align:center;
+  padding:12px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.wholesale-unit{
+  color:#1565c0;
+  font-size:13px;
+  font-weight:600;
+  margin:4px 0;
 }
 
 /* PRODUCTS */
@@ -358,9 +404,29 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
 
 <div class="header">
 
-  <div class="logo">
-    <i class="fas fa-store"></i> Ramola Pustak Bhandar
+ <div class="logo">
+  <i class="fas fa-store"></i> Ramola Pustak Bhandar
+</div>
+
+<div class="profile-menu">
+
+  <div class="profile-btn" onclick="toggleProfile()">
+    👤 <span id="userName">Profile</span>
   </div>
+
+  <div id="profileDropdown" class="profile-dropdown">
+
+    <div style="font-weight:600;margin-bottom:8px;" id="userBusiness"></div>
+
+    <div style="font-size:13px;color:#666;margin-bottom:10px;" id="userPhone"></div>
+
+    <button onclick="logout()">
+      Logout
+    </button>
+
+  </div>
+</div>
+
 
   <nav class="nav-menu" id="navMenu">
     <a href="index.html">Home</a>
@@ -379,7 +445,9 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
 <div class="search-box">
   <input type="text" id="searchInput" placeholder="Search products...">
 </div>
-
+<div class="wholesale-banner">
+  🏪 Wholesale Partner Portal
+</div>
 <div class="container">
   <div class="sidebar">
     <h3>Categories</h3>
@@ -461,44 +529,203 @@ body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9}
     </footer>
   <!--                Footer End                        -->                
 <script>
+    function updateChargesUI(){
+
+  let box = document.getElementById("chargesBox");
+  if(!box) return;
+
+  let total = cart.reduce((t,i)=>t+i.qty*i.price,0);
+  let smallCartCharge = getSmallCartCharge(total);
+
+  let msg = "";
+
+  if(smallCartCharge > 0){
+    let needed = 0;
+
+    if(total <= 50) needed = 51 - total;
+    else if(total <= 100) needed = 101 - total;
+    else if(total <= 150) needed = 151 - total;
+
+    msg += `🧾 Small order fee: ₹${smallCartCharge}<br>`;
+    msg += `💡 Add ₹${needed} more to avoid this charge`;
+  } else {
+    msg += `✅ No small order fee`;
+  }
+
+  box.innerHTML = msg;
+}
+    function checkoutWhatsApp() {
+
+  if(cart.length === 0){
+    alert("Your cart is empty");
+    return;
+  }
+
+  document.getElementById("checkoutModal").style.display = "flex";
+}
+    function openCart() {
+  document.getElementById("cartPanel").classList.add("open");
+}
+
+function closeCart() {
+  document.getElementById("cartPanel").classList.remove("open");
+}
+   const approved = localStorage.getItem("wholesaleApproved");
+const registered = localStorage.getItem("wholesaleRegistered");
+
+const user =
+JSON.parse(
+localStorage.getItem("wholesaleUser")
+);
+
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
+
+if(user){
+
+document.getElementById(
+"userName"
+).innerText =
+user.owner_name;
+
+document.getElementById(
+"userBusiness"
+).innerHTML =
+"<b>Business:</b> " +
+user.business_name;
+
+document.getElementById(
+"userPhone"
+).innerHTML =
+"<b>Phone:</b> " +
+user.phone;
+
+}
+
+});
+
+function toggleProfile(){
+
+const d =
+document.getElementById(
+"profileDropdown"
+);
+
+d.style.display =
+d.style.display==="block"
+? "none"
+: "block";
+
+}
+
+if(user){
+
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
+
+document.getElementById(
+"userName"
+).innerHTML =
+`${user.owner_name || user.business_name}`;
+
+});
+
+}
+function logout(){
+
+if(!confirm("Logout from wholesale account?")){
+return;
+}
+
+localStorage.removeItem(
+"wholesaleApproved"
+);
+
+localStorage.removeItem(
+"wholesaleUser"
+);
+
+localStorage.removeItem(
+"wholesaleCart"
+);
+
+window.location.href =
+"wholesale-login.html";
+
+}
+
+if(approved !== "yes"){
+
+    if(registered === "yes"){
+        window.location.href = "wholesale-login.html";
+    }else{
+        window.location.href = "wholesale-register.html";
+    }
+}
+
+
   
 
 const SHEET_URL =
 "https://opensheet.elk.sh/10GIljGz8ZqNsznhjsxMzWSZkG76vRJjOjPqAqMJT5Ag/Product%20List";
 
-let allProducts=[],cart=JSON.parse(localStorage.getItem("cart"))||[];
+let allProducts=[],
+cart=JSON.parse(localStorage.getItem("wholesaleCart"))||[];
 let selectedCategories=[],selectedBrands=[];
 
 fetch(SHEET_URL)
 .then(r=>r.json())
 .then(data=>{
-  allProducts=data.filter(p =>
-    (p.status||"").toString().trim().toLowerCase()==="active"
-  );
-  loadFilters(allProducts);
-  renderProducts(allProducts);
+
+console.log(data);
+
+allProducts=data.filter(p =>
+(p.status||"").toString().trim().toLowerCase()==="active"
+);
+
+loadFilters(allProducts);
+renderProducts(allProducts);
+
 })
 .catch(()=>alert("Error loading products. Check sheet sharing."));
 
+
 function getDiscountBadge(p){
-  let price = Number(p.price||0);
-  let mrp = Number(p.mrp||0);
+
+  let price = Number(p.wholesale_price || 0);
+  let mrp = Number(p.mrp || 0);
 
   if(mrp > price){
-    let discount = Math.round(((mrp - price) / mrp) * 100);
-    return `<div class="discount-badge">${discount}% OFF</div>`;
+
+    let discount =
+      Math.round(((mrp-price)/mrp)*100);
+
+    return `
+      <div class="discount-badge">
+        ${discount}% OFF
+      </div>`;
   }
+
   return "";
 }
 
 function getDiscountText(p){
-  let price = Number(p.price||0);
-  let mrp = Number(p.mrp||0);
+
+  let price = Number(p.wholesale_price || 0);
+  let mrp = Number(p.mrp || 0);
 
   if(mrp > price){
+
     let save = mrp - price;
-    return `<div class="save-text">You save ₹${save}</div>`;
+
+    return `
+      <div class="save-text">
+        You save ₹${save}
+      </div>`;
   }
+
   return "";
 }
 
@@ -523,9 +750,20 @@ function renderProducts(list){
         <div class="card-title">${p.name||""}</div>
 
         <div class="price-row">
-          <span class="price">₹${p.price||0}</span>
-          ${Number(p.mrp) > Number(p.price) ? `<span class="mrp">₹${p.mrp}</span>` : ""}
-        </div>
+
+<span class="price">
+₹${p.wholesale_price || 0}
+</span>
+
+${Number(p.mrp) > Number(p.wholesale_price)
+? `<span class="mrp">₹${p.mrp}</span>`
+: ""}
+
+</div>
+
+<div class="wholesale-unit">
+Qty: ${p.wholesale_unit || ""}
+</div>
 
         ${getDiscountText(p)}
 
@@ -600,14 +838,18 @@ function getDistance(lat1, lon1, lat2, lon2){
 }
 
 function addToCart(p){
-  if(!p.image){
-    p.image = "https://via.placeholder.com/60";
+
+  let item = cart.find(x => x.id === p.id);
+
+  if(item){
+    item.qty++;
+  }else{
+    cart.push({
+      ...p,
+      qty: 1,
+      price: Number(p.wholesale_price || 0)
+    });
   }
-
-  let i = cart.find(x => x.id === p.id);
-
-  if(i) i.qty++;
-  else cart.push({...p, qty:1});
 
   saveCart();
   openCart();
@@ -618,40 +860,61 @@ function changeQty(i,d){
   saveCart();
 }
 function saveCart(){
-  localStorage.setItem("cart",JSON.stringify(cart));
+  localStorage.setItem(
+  "wholesaleCart",
+  JSON.stringify(cart)
+);
   renderCart();
 }
 function renderCart(){
+
   cartItems.innerHTML="";
-  let total=0,qty=0;
+
+  let total = 0;
+  let qty = 0;
+
   cart.forEach((i,n)=>{
-    total+=i.qty*i.price;qty+=i.qty;
-    cartItems.innerHTML+=`
+
+    total += i.qty * Number(i.price);
+    qty += i.qty;
+
+    cartItems.innerHTML += `
     <div class="cart-item">
-      <img src="${i.image1}" onerror="this.src='https://via.placeholder.com/60'">
+
+      <img src="${i.image1 || i.image || ''}"
+           onerror="this.src='https://via.placeholder.com/60'">
+
       <div>
-        <div style="font-weight:600">${i.name}</div>
-        <div>₹${i.price}</div>
+
+        <div style="font-weight:600">
+          ${i.name}
+        </div>
+
+        <div>
+          ₹${i.price}
+        </div>
+
         <div class="qty-controls">
-  <button class="qty-btn" onclick="changeQty(${n},-1)">-</button>
-  <span style="min-width:20px;text-align:center;font-weight:600;">
-    ${i.qty}
-  </span>
-  <button class="qty-btn" onclick="changeQty(${n},1)">+</button>
-</div>
+
+          <button class="qty-btn"
+            onclick="changeQty(${n},-1)">-</button>
+
+          <span style="min-width:20px;text-align:center;font-weight:600;">
+            ${i.qty}
+          </span>
+
+          <button class="qty-btn"
+            onclick="changeQty(${n},1)">+</button>
+
+        </div>
+
       </div>
+
     </div>`;
   });
-  cartCount.innerText=qty;
-  cartTotal.innerText="Total: ₹"+total;
-  updateChargesUI();
-}
-function openCart(){cartPanel.classList.add("open")}
-function closeCart(){cartPanel.classList.remove("open")}
-function checkoutWhatsApp(){
-  if(!cart.length) return alert("Cart empty");
 
-  document.getElementById("checkoutModal").style.display="flex";
+  cartCount.innerText = qty;
+  cartTotal.innerText = "Total: ₹" + total;
 
   updateChargesUI();
 }
@@ -687,7 +950,10 @@ function sendOrder(){
   }
 
   // ✅ Calculate totals properly
-  let total = cart.reduce((t,i)=>t+i.qty*i.price,0);
+  let total = cart.reduce(
+  (t,i)=>t + (i.qty * Number(i.price)),
+  0
+);
   let smallCartCharge = getSmallCartCharge(total);
   let finalTotal = total + deliveryCharge + smallCartCharge;
 

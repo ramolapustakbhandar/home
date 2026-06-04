@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Wholesale Registration</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f5f5;
+}
+.page-wrapper{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+/*                  ----------header start----------                      */
+
+/* HEADER */
+.header{
+  background:#000;
+  color:#fff;
+  padding:14px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  width:100%;
+  box-sizing:border-box;
+  z-index:1000;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+}
+
+.nav-menu{
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+.nav-menu a{
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+}
+
+.nav-menu a:hover{
+  text-decoration:underline;
+}
+
+/* MOBILE MENU */
+.menu-toggle{
+  display:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+@media(max-width:768px){
+
+  .header{
+    padding:12px 15px;
+  }
+
+  .logo{
+    font-size:15px;
+  }
+
+  .menu-toggle{
+    display:block;
+  }
+
+  .nav-menu{
+    position:absolute;
+    top:60px;
+    left:0;
+    width:100%;
+    background:#000;
+    flex-direction:column;
+    display:none;
+  }
+
+  .nav-menu.active{
+    display:flex;
+  }
+}
+
+.box{
+background:#fff;
+padding:25px;
+border-radius:10px;
+width:95%;
+max-width:450px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin-bottom:12px;
+border:1px solid #ccc;
+border-radius:6px;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+background:#000;
+color:#fff;
+font-size:15px;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.note{
+margin-top:15px;
+font-size:13px;
+text-align:center;
+color:#666;
+}
+
+a{
+color:#1565c0;
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+<!--                Header start                        -->
+     <div class="header">
+
+  <div class="logo">
+    <i class="fas fa-store"></i> Ramola Pustak Bhandar
+  </div>
+
+  <nav class="nav-menu" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="products.html">Product</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="wholesale.html">Wholesale</a>
+  </nav>
+
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <i class="fas fa-bars"></i>
+  </div>
+
+</div>
+
+  <!--                Header End                        -->
+
+<div class="page-wrapper">
+<div class="box">
+
+<h2>Wholesale Registration</h2>
+
+<form id="regForm">
+
+<input type="text" id="business" placeholder="Business Name" required>
+
+<input type="text" id="owner" placeholder="Owner Name" required>
+
+<input type="tel" id="phone" placeholder="Phone Number" required>
+
+<input type="email" id="email" placeholder="Email Address" required>
+
+<textarea id="address"
+placeholder="Business Address"
+required></textarea>
+
+<input type="text" id="gst" placeholder="GST Number">
+
+<input type="password" id="password"
+placeholder="Create Password"
+required>
+
+<button type="submit">
+Submit Registration
+</button>
+
+</form>
+
+<div class="note">
+Already registered?
+<a href="wholesale-login.html">
+Login Here
+</a>
+</div>
+
+</div>
+</div>
+
+<script>
+
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbx3so5EgkWbP6APZeXjl63nsiQ58-8h5KXRzP_z5QT_15VAX8uED6tZO_RhVHbz-0K0Zw/exec";
+
+document
+.getElementById("regForm")
+.addEventListener("submit",async function(e){
+
+e.preventDefault();
+
+const data = {
+
+business_name:
+document.getElementById("business").value,
+
+owner_name:
+document.getElementById("owner").value,
+
+phone:
+document.getElementById("phone").value,
+
+email:
+document.getElementById("email").value,
+
+address:
+document.getElementById("address").value,
+
+gst:
+document.getElementById("gst").value,
+
+password:
+document.getElementById("password").value,
+
+status:"Pending"
+
+};
+
+try{
+
+await fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify(data)
+});
+
+localStorage.setItem(
+"wholesaleRegistered",
+"yes"
+);
+
+alert(
+"Registration submitted successfully. Wait for admin approval."
+);
+
+window.location.href =
+"wholesale-pending.html";
+
+}
+catch(err){
+
+alert(
+"Registration failed. Please try again."
+);
+
+}
+
+});
+function toggleMenu(){
+  document.getElementById("navMenu").classList.toggle("active");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Wholesale Login</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4f6f9;
+min-height:100vh;
+}
+.page-wrapper{
+min-height:calc(100vh - 70px);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+/*                  ----------header start----------                      */
+
+/* HEADER */
+.header{
+background:#000;
+color:#fff;
+padding:14px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+width:100%;
+box-sizing:border-box;
+z-index:1000;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:8px;
+white-space:nowrap;
+}
+
+
+/* NAV MENU */
+.nav-menu{
+  display:flex;
+  gap:22px;
+}
+
+.nav-menu a{
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+}
+
+.nav-menu a:hover{
+  text-decoration:underline;
+}
+
+/* MOBILE MENU */
+.menu-toggle{
+  display:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+@media(max-width:768px){
+
+.login-box{
+padding:25px 20px;
+}
+
+.login-logo{
+font-size:22px;
+}
+
+.header{
+padding:12px 15px;
+}
+
+.logo{
+font-size:15px;
+}
+
+}
+
+.login-box{
+background:#fff;
+width:100%;
+max-width:400px;
+padding:30px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.15);
+}
+
+.login-logo{
+text-align:center;
+font-size:24px;
+font-weight:bold;
+margin-bottom:20px;
+color:#000;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border:1px solid #ccc;
+border-radius:6px;
+font-size:14px;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:6px;
+background:#000;
+color:#fff;
+font-size:15px;
+cursor:pointer;
+}
+
+button:hover{
+background:#222;
+}
+
+.links{
+margin-top:15px;
+text-align:center;
+font-size:14px;
+}
+
+.links a{
+color:#1565c0;
+text-decoration:none;
+font-weight:bold;
+}
+
+.links a:hover{
+text-decoration:underline;
+}
+
+.notice{
+background:#fff8e1;
+padding:10px;
+border-radius:6px;
+font-size:13px;
+margin-bottom:15px;
+text-align:center;
+}
+
+</style>
+</head>
+<body>
+    <!--                Header start                        -->
+     <div class="header">
+
+  <div class="logo">
+    <i class="fas fa-store"></i> Ramola Pustak Bhandar
+  </div>
+
+  <nav class="nav-menu" id="navMenu">
+    <a href="index.html">Home</a>
+    <a href="products.html">Product</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="wholesale.html">Wholesale</a>
+  </nav>
+
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <i class="fas fa-bars"></i>
+  </div>
+
+</div>
+
+  <!--                Header End                        -->
+
+<div class="page-wrapper">
+
+<div class="login-box">
+
+<div class="login-logo">
+🏪 Ramola Wholesale
+</div>
+
+<h2>Partner Login</h2>
+
+<div class="notice">
+Only approved wholesale partners can login.
+</div>
+
+<input
+id="mobile"
+type="tel"
+placeholder="Mobile Number">
+
+<input
+id="password"
+type="password"
+placeholder="Password">
+
+<button onclick="login()">
+Login
+</button>
+
+<div class="links">
+
+<p style="margin-top:15px;">
+New User?
+<a href="wholesale-register.html">
+Register Here
+</a>
+</p>
+
+<p style="margin-top:10px;">
+Already Registered but not approved?
+<br>
+Please wait for admin approval.
+</p>
+
+</div>
+
+</div>
+</div>
+<script>
+const USER_SHEET =
+"https://opensheet.elk.sh/10GIljGz8ZqNsznhjsxMzWSZkG76vRJjOjPqAqMJT5Ag/WholesaleUsers";
+
+async function login(){
+
+const mobile =
+document.getElementById("mobile").value.trim();
+
+const password =
+document.getElementById("password").value.trim();
+
+if(!mobile || !password){
+alert("Enter mobile and password");
+return;
+}
+
+try{
+
+const users =
+await fetch(USER_SHEET)
+.then(r=>r.json());
+
+const user = users.find(u =>
+
+String(u.phone).trim() === mobile &&
+
+String(u.password).trim() === password &&
+
+String(u.status).trim().toLowerCase() === "approved"
+
+);
+
+if(user){
+
+localStorage.setItem(
+"wholesaleApproved",
+"yes"
+);
+
+localStorage.setItem(
+"wholesaleUser",
+JSON.stringify(user)
+);
+
+window.location.href =
+"wholesale.html";
+
+}
+else{
+
+alert(
+"Invalid login or account not approved yet."
+);
+
+}
+
+}
+catch(err){
+
+alert(
+"Unable to connect to user database."
+);
+
+}
+
+}
+function toggleMenu(){
+document.getElementById("navMenu").classList.toggle("active");
+}
+
+</script>
+
+</body>
+</html>
