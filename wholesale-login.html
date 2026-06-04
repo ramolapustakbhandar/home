@@ -78,13 +78,31 @@ white-space:nowrap;
 
 @media(max-width:768px){
 
-.login-box{
-padding:25px 20px;
-}
+  .header{
+    padding:12px 15px;
+  }
 
-.login-logo{
-font-size:22px;
-}
+  .logo{
+    font-size:15px;
+  }
+
+  .menu-toggle{
+    display:block;
+  }
+
+  .nav-menu{
+    position:absolute;
+    top:60px;
+    left:0;
+    width:100%;
+    background:#000;
+    flex-direction:column;
+    display:none;
+  }
+
+  .nav-menu.active{
+    display:flex;
+  }
 
 .header{
 padding:12px 15px;
